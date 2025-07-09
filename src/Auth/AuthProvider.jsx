@@ -60,7 +60,7 @@ const [user, setUser] = useState(null);
         logOut,
         updateUserProfile
     }
-    console.log("Current user :" , user)
+    // console.log("Current user :" , user)
     // console.log("Current user :" , user?.email)
 
     return (
