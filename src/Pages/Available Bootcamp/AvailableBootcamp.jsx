@@ -57,7 +57,7 @@ const AvailableBootcamp = () => {
             {currentData.map((camp) => (
               <tr
                 key={camp._id}
-                className="border-b shadow-xl hover:bg-indigo-50 transition"
+                className="border-b transition-transform duration-300 hover:scale-103 shadow-xl hover:bg-indigo-50 "
               >
                 <td className="p-3">
                   <img

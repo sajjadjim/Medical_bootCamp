@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useParams } from "react-router";
+import { Link } from "react-router";
 
 const CampDetails = () => {
   const  campId  = useParams() // get id from route param
@@ -33,11 +34,11 @@ const CampDetails = () => {
 
   return (
     <section className="py-10 px-4 max-w-4xl mx-auto">
-      <div className="bg-white shadow-lg mt-20 rounded-xl overflow-hidden">
+      <div className="bg-white shadow-xl shadow-indigo-100 mt-20 rounded-xl overflow-hidden">
         <img
           src={camp.image}
           alt={camp.campName}
-          className="w-full h-64 object-cover"
+          className="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
         />
         <div className="p-6">
           <h1 className="text-3xl font-bold mb-2">{camp.campName}</h1>
@@ -68,8 +69,8 @@ const CampDetails = () => {
             </div>
           </div>
 
-          <button className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-            Join Now
+          <button className="mt-4 px-6 py-2 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+            <Link to={`/registration/${campId.id}`}>Join Now</Link>
           </button>
         </div>
       </div>
