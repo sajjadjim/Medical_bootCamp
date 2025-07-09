@@ -7,14 +7,14 @@ import { useEffect } from 'react';
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
-  console.log("user in navbar", user)
+  // console.log("user in navbar", user)
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
   // Define navbar items with label, path and icon
   const navItems = [
     { label: 'Home', to: '/', Icon: Home },
-    { label: 'Available camps', to: '/project', Icon: Code },
+    { label: 'Available camps', to: '/availableBootcamp', Icon: Code },
     { label: 'About', to: '/about', Icon: User },
     { label: 'Contact', to: '/contact', Icon: Mail },
   ];
@@ -22,7 +22,7 @@ const Navbar = () => {
     <Link
       key={label}
       to={to}
-      className="group flex items-center gap-1 hover:text-teal-500 transition relative font-medium"
+      className="group flex items-center gap-1 text-gray-500  hover:text-indigo-500 transition relative font-medium"
     >
       {/* Text */}
       {label}
@@ -64,10 +64,10 @@ const Navbar = () => {
 
   return (
     <div>
-      <nav className="md:w-11/12 md:mx-auto text-gray-500 w-full fixed top-0 left-0 right-0 z-50 shadow-md ">
+      <nav className="md:w-11/12 md:mx-auto w-full fixed top-0 left-0 right-0 z-50 shadow-md ">
         <div className="flex justify-between items-center py-3 md:py-4">
           {/* Logo */}
-          <div className="md:text-3xl text-2xl font-bold cursor-pointer">Medical Camp <span className='text-teal-600'>(MCMS)</span></div>
+          <div className="md:text-3xl text-2xl font-bold cursor-pointer">Medical Camp <span className='text-indigo-500'>(MCMS)</span></div>
           {/* Desktop Menu */}
           <ul className="hidden md:flex gap-8">{navbar}</ul>
           <div>

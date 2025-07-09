@@ -9,6 +9,9 @@ import Login from "../Pages/Authentication/Login";
 import Authentication from "../Layouts/Authentication";
 import About from "../Pages/About/About";
 import Register from "../Pages/Authentication/Register";
+import AvailableBootcamp from "../Pages/Available Bootcamp/AvailableBootcamp";
+import CampDetails from "../Pages/Available Bootcamp/CampDetails";
+
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +25,15 @@ export const router = createBrowserRouter([
       {
         path: '/about',
         Component: About
+      },
+      {
+        path:'availableBootcamp',
+       element: <AvailableBootcamp></AvailableBootcamp>
+      },
+      {
+        path:'/camps/:id',
+        element:<CampDetails></CampDetails>,
+        loader: ({params}) => fetch(`http://localhost:3000/camps/${params.id}`)
       }
     ]
   },
