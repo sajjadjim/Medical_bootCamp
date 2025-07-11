@@ -2,8 +2,11 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../../Hook/useAxiosSecure";
 import Swal from "sweetalert2";
+import  useAuth from "../../../../Hook/useAuth.jsx";
 
 const AddBootcamp = () => {
+  const {user} = useAuth();
+  // console.log(user?.email)
   const {
     register,
     handleSubmit,
@@ -14,6 +17,7 @@ const AddBootcamp = () => {
 
  const onSubmit = async (data) => {
   try {
+  
     const res = await axiosSecure.post("/camps", data);
     if (res.data.insertedId) {
       Swal.fire({
@@ -142,6 +146,19 @@ const AddBootcamp = () => {
                 Healthcare professional is required
               </p>
             )}
+          </div>
+           {/* Created Organizer  */}
+          <div>
+            <label className="block mb-1 font-medium text-gray-700">
+              Organizer Email 
+            </label>
+            <input
+              type="text"
+              {...register("created_by", { required: true })}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-indigo-500 focus:outline-none"
+              defaultValue={user?.email}
+              readOnly
+            />
           </div>
           {/* Description (Full Width) */}
           <div className="md:col-span-2">

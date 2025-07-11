@@ -17,7 +17,6 @@ const CampDetails = () => {
         console.error("Failed to fetch camp details", err);
       }
     };
-
     fetchCamp();
   }, [campId]);
 

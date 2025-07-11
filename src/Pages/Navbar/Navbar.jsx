@@ -67,7 +67,7 @@ const Navbar = () => {
       <nav className="md:w-11/12 md:mx-auto w-full fixed top-0 left-0 right-0 z-50 shadow-md ">
         <div className="flex justify-between items-center py-3 md:py-4">
           {/* Logo */}
-          <div className="md:text-3xl text-2xl font-bold cursor-pointer">Medical Camp <span className='text-indigo-500'>(MCMS)</span></div>
+          <div className="md:text-3xl text-2xl font-bold cursor-pointer"><Link to='/'>Medical Camp <span className='text-indigo-500'>(MCMS)</span></Link></div>
           {/* Desktop Menu */}
           <ul className="hidden md:flex gap-8">{navbar}</ul>
           <div >

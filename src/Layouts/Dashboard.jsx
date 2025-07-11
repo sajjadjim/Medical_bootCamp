@@ -9,7 +9,7 @@ const Dashboard = () => {
     { name: "Home", path: "/" },
     { name: "Organizer Profile", path: "/organizer-profile" },
     { name: "Add BootCamp", path: "/dashboard/addNewBootcamp" },
-    { name: "Manage Camps", path: "/manage-camps" },
+    { name: "Manage Camps", path: "/dashboard/manageCamps" },
     { name: "Manage Registered Camps", path: "/dashboard/manage_registered_camps" },
   ];
 

@@ -16,6 +16,8 @@ import Dashboard from "../Layouts/Dashboard";
 import ManageRegisteredCamp from "../Pages/Dashboard/Organizer Dashboard/ManageRegisteredCamp";
 import Contact from "../Pages/Contact/Contact";
 import AddBootcamp from "../Pages/Dashboard/Organizer Dashboard/Add New Bootcamp/AddBootCamp";
+import PrivateRoute from "../Routes/PrivateRoute";
+import ManageCamps from "../Pages/Dashboard/Organizer Dashboard/Manage Camps/ManageCamps";
 
 
 export const router = createBrowserRouter([
@@ -38,7 +40,7 @@ export const router = createBrowserRouter([
       ,
       {
         path: 'availableBootcamp',
-        element: <AvailableBootcamp />,
+        element: <PrivateRoute><AvailableBootcamp /></PrivateRoute>,
         loader: () => fetch('http://localhost:3000/camps') // Load all camps data
       },
       {
@@ -73,7 +75,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    Component: Dashboard,
+    element:<PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
     children: [
       {
         path: 'manage_registered_camps',
@@ -83,6 +85,10 @@ export const router = createBrowserRouter([
       {
         path: 'addNewBootcamp',
         element: <AddBootcamp></AddBootcamp>
+      },
+      {
+        path: 'manageCamps',
+        element: <ManageCamps></ManageCamps>
       }
     ]
   }
