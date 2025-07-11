@@ -70,10 +70,10 @@ const Navbar = () => {
           <div className="md:text-3xl text-2xl font-bold cursor-pointer">Medical Camp <span className='text-indigo-500'>(MCMS)</span></div>
           {/* Desktop Menu */}
           <ul className="hidden md:flex gap-8">{navbar}</ul>
-          <div>
+          <div >
             {
               user ? (
-                <div className="relative group">
+                <div className="relative group md:block hidden">
                   <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                       <div className="w-10 rounded-full">
@@ -89,7 +89,6 @@ const Navbar = () => {
                       tabIndex={0}
                       className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                       <li><Link to='/dashboard'>Dashboard </Link></li>
-                      <li><Link to='/myItems'>My Items</Link></li>
                       <li><Link to='/userInfo'>Setting</Link></li>
                       <li>{
                         user ? <Link onClick={handleLogOut} className='' to='/auth/login'><button className=""> Logout</button></Link> :
@@ -124,7 +123,28 @@ const Navbar = () => {
             style={{ willChange: 'max-height, opacity' }}
           >
             <div className='items-center flex justify-center gap-10 py-4'>
-              <Link to='/auth/login' className='btn rounded-4xl py-1 px-10 shadow-2xl '>Log in</Link> <Link to='/auth/login' className='btn rounded-4xl py-1 text-white px-10 shadow-2xl bg-indigo-500'>Register</Link>
+              {
+                user ? (
+                  <div className="relative group">
+                    <div className="dropdown dropdown-end">
+                      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                        <div className="w-10 rounded-full">
+                          <Link tabIndex={0} role="button" to='/'>
+                            {
+                              <img className='rounded-full h-8 w-8 mx-1 cursor-pointer' src={currentUser?.image} alt="User" />
+                            }
+
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                 <div>
+                  <Link to='/auth/login' className='btn rounded-4xl py-1 px-10 shadow-2xl '>Log in</Link> <Link to='/auth/login' className='btn rounded-4xl py-1 text-white px-10 shadow-2xl bg-indigo-500'>Register</Link>
+                 </div>
+                )
+              }
             </div>
             <ul className="px-4 pb-4 my-2  shadow-md justify-center align-center bg-transparent grid font-medium space-y-3">
               {navItems.map(({ label, to, Icon }) => (
@@ -142,10 +162,10 @@ const Navbar = () => {
                   />
                 </Link>
               ))}
+              {user ? <div className='grid gap-2'><Link to='/dashboard'>DashBoard</Link><li className='cursor-pointer ' onClick={handleLogOut}>Logout</li></div> : ('') }
             </ul>
+
           </div>
-
-
         </div>
       </nav>
     </div>

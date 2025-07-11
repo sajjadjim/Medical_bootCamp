@@ -8,7 +8,7 @@ const Dashboard = () => {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Organizer Profile", path: "/organizer-profile" },
-    { name: "Add BootCamp", path: "/add-camp" },
+    { name: "Add BootCamp", path: "/dashboard/addNewBootcamp" },
     { name: "Manage Camps", path: "/manage-camps" },
     { name: "Manage Registered Camps", path: "/dashboard/manage_registered_camps" },
   ];

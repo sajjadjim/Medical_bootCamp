@@ -14,6 +14,8 @@ import CampDetails from "../Pages/Available Bootcamp/CampDetails";
 import CampRegistrationForm from "../Pages/Camaping Related work/CampResistrationForm";
 import Dashboard from "../Layouts/Dashboard";
 import ManageRegisteredCamp from "../Pages/Dashboard/Organizer Dashboard/ManageRegisteredCamp";
+import Contact from "../Pages/Contact/Contact";
+import AddBootcamp from "../Pages/Dashboard/Organizer Dashboard/Add New Bootcamp/AddBootCamp";
 
 
 export const router = createBrowserRouter([
@@ -29,6 +31,11 @@ export const router = createBrowserRouter([
         path: '/about',
         Component: About
       },
+      {
+        path:'/contact',
+        Component: Contact
+      }
+      ,
       {
         path: 'availableBootcamp',
         element: <AvailableBootcamp />,
@@ -72,6 +79,10 @@ export const router = createBrowserRouter([
         path: 'manage_registered_camps',
         element: <ManageRegisteredCamp />,
         loader: () => fetch('http://localhost:3000/camps')
+      },
+      {
+        path: 'addNewBootcamp',
+        element: <AddBootcamp></AddBootcamp>
       }
     ]
   }
