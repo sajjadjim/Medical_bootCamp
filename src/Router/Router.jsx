@@ -18,7 +18,9 @@ import Contact from "../Pages/Contact/Contact";
 import AddBootcamp from "../Pages/Dashboard/Organizer Dashboard/Add New Bootcamp/AddBootCamp";
 import PrivateRoute from "../Routes/PrivateRoute";
 import ManageCamps from "../Pages/Dashboard/Organizer Dashboard/Manage Camps/ManageCamps";
-
+import RegisteredCamp from "../Pages/Dashboard/Participant Dashboard/Registered camp/RegisteredCamp";
+import Payment from "../Pages/Dashboard/Participant Dashboard/Payment system/Payment";
+import PaymentHistory from "../Pages/Dashboard/Participant Dashboard/Payment History/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -34,7 +36,7 @@ export const router = createBrowserRouter([
         Component: About
       },
       {
-        path:'/contact',
+        path: '/contact',
         Component: Contact
       }
       ,
@@ -75,7 +77,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element:<PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
+    element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
     children: [
       {
         path: 'manage_registered_camps',
@@ -89,6 +91,19 @@ export const router = createBrowserRouter([
       {
         path: 'manageCamps',
         element: <ManageCamps></ManageCamps>
+      },
+      {
+        path: '/dashboard/registered-camps'
+        , element: <RegisteredCamp></RegisteredCamp>
+      },
+      {
+        path: 'payment/:campId',
+        Component: Payment
+      
+      },
+      {
+      path:'payment-history',
+      element: <PaymentHistory></PaymentHistory>
       }
     ]
   }

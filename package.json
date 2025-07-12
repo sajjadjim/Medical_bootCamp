@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^3.7.0",
+    "@stripe/stripe-js": "^7.4.0",
     "@tailwindcss/vite": "^4.1.11",
     "@tanstack/react-query": "^5.82.0",
     "@tanstack/react-query-devtools": "^5.82.0",
@@ -28,6 +30,7 @@
     "react-tabs": "^6.1.0",
     "react-toastify": "^11.0.5",
     "recharts": "^3.1.0",
+    "stripe": "^18.3.0",
     "sweetalert2": "^11.22.2",
     "tailwindcss": "^4.1.11"
   },

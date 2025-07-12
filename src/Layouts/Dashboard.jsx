@@ -11,6 +11,10 @@ const Dashboard = () => {
     { name: "Add BootCamp", path: "/dashboard/addNewBootcamp" },
     { name: "Manage Camps", path: "/dashboard/manageCamps" },
     { name: "Manage Registered Camps", path: "/dashboard/manage_registered_camps" },
+    { name: "Analytics", path: "/dashboard/analytics" },
+    { name: "Participant Profile", path: "/dashboard/participant-profile" },
+    { name: "Registered Camps", path: "/dashboard/registered-camps" },
+    { name: "Payment History", path: "/dashboard/payment-history" },
   ];
 
   return (

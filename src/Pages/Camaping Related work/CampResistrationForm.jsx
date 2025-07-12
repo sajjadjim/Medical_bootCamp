@@ -43,6 +43,8 @@ const CampRegistrationForm = () => {
       campName: camp.campName || "",
       campFees: camp.campFees || "",
       location: camp.location || "",
+      campId : camp._id || "",
+      ownerEmail: camp.created_by || "",
     }
     // Open a feedback and rating modal using SweetAlert2
     Swal.fire({
@@ -142,6 +144,7 @@ const CampRegistrationForm = () => {
             value={camp.campName}
             readOnly
             className="w-full px-4 py-3 mt-2 text-gray-400 rounded-xl bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+            
           />
         </div>
 

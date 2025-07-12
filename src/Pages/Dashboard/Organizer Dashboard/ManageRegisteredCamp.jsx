@@ -3,9 +3,15 @@ import useAxiosSecure from '../../../Hook/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { FaUsers, FaMoneyBillWave, FaClipboardList, FaMoneyCheckAlt } from "react-icons/fa";
+import { use } from 'react';
+import { AuthContext } from '../../../Auth/AuthContext';
 
 const ManageRegisteredCamp = () => {
-    // const { user } = useAuth()  
+    const { user } = use(AuthContext);
+    const userEmail = user?.email;
+    // console.log(userEmail);
+    const [selectedCamps, setSelectedCamps] = useState(null);
+
     const axiosSecure = useAxiosSecure();
     const { data: paymentsAll = [] } = useQuery({
         queryFn: async () => {
@@ -56,7 +62,19 @@ const ManageRegisteredCamp = () => {
         },
     });
 
-    console.log("object", selectCapsData);
+    const { data: registerCamps = [] } = useQuery({
+        queryKey: ['registrations'],
+        queryFn: async () => {
+            const res = await axiosSecure.get(`/registrations`);
+            return res.data;
+        },
+    });
+
+    // console.log("All the Data Register Camps", registerCamps);
+    const selectCapsDataFiltered = registerCamps.filter(camp => camp.ownerEmail == userEmail);
+    // setSelectedCamps(selectCapsDataFiltered);
+    console.log(selectCapsDataFiltered)
+
 
     return (
        <div className="w-full px-4 md:px-8 py-6">

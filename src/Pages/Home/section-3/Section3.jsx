@@ -12,7 +12,7 @@ const Section3 = () => {
       try {
         const res = await axios.get("http://localhost:3000/camps"); // <-- your API
         const sorted = res.data
-          .sort((a, b) => b.totalParticipant - a.totalParticipant)
+          .sort((a, b) => b.totalCount - a.totalCount)
           .slice(0, 6);
         setBootcamps(sorted);
       } catch (err) {
