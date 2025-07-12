@@ -16,7 +16,7 @@ const PaymentHistory = () => {
         }
     });
 
-    if (isLoading) return <div className="text-center mt-10 text-lg">Loading...</div>;
+    if (isLoading) return <div className="text-center mt-10 text-lg">Loading Data...</div>;
 
    return (
   <div className="p-4 max-w-7xl mx-auto font-inter">

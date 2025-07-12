@@ -1,20 +1,65 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { use } from "react";
+import { AuthContext } from "../../../Auth/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../Hook/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const RegisterManage = () => {
   const [participants, setParticipants] = useState([]);
+  const axiosSecure = useAxiosSecure()
 
-  // Load data from server
+  const { user } = use(AuthContext);
+  const userEmail = user?.email;
+
+  const { data: registerCamps = [] } = useQuery({
+    queryKey: ['registrations'],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/registrations`);
+      return res.data;
+    },
+  });
+
+  // setParticipants(registerCamps)
+  // console.log("All the Data Register Camps", registerCamps);
   useEffect(() => {
-    axios.get("/registrations") // update this URL based on your backend
-      .then(res => setParticipants(res.data))
-      .catch(err => console.error("Error fetching data:", err));
-  }, []);
+    const filtered = registerCamps.filter(camp => camp.ownerEmail === userEmail);
+    setParticipants(filtered);
+  }, [registerCamps, userEmail]);
+  // console.log("object", selectCapsDataFiltered);
+
 
   // Delete participant
   const handleDelete = async (id) => {
+    console.log("object", id);
     try {
-      await axios.delete(`/registrations/${id}`);
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "This parcel will be permanently deleted.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const res = await axiosSecure.delete(`/registrations/${id}`);
+            if (res.data.deletedCount > 0) {
+              Swal.fire("Deleted!", "Camp has been deleted.", "success");
+              // refetch(); // ✅ Refresh the camp list
+            } else {
+              Swal.fire("Failed", "Could not delete the camp.", "error");
+            }
+          } catch (error) {
+            Swal.fire("Error", "Something went wrong!", "error");
+            console.error("Delete error:", error);
+          }
+        }
+      });
+      ;
       // Remove from UI
       setParticipants(prev => prev.filter(p => p._id !== id));
     } catch (err) {
@@ -24,12 +69,12 @@ const RegisterManage = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">Registered Participants</h2>
+      <h2 className="md:text-3xl text-xl font-semibold text-center mb-4">Registered Participants</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow-md rounded-lg">
           <thead className="bg-gray-100 text-gray-700">
             <tr>
-              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Participant Name</th>
               <th className="px-4 py-2">Gender</th>
               <th className="px-4 py-2">Camp Name</th>
               <th className="px-4 py-2">Location</th>
@@ -59,8 +104,8 @@ const RegisterManage = () => {
                 </td>
                 <td className="px-4 py-2">
                   {p.payment_status === 'paid' ? (
-                    <button disabled className="bg-gray-300 text-white px-3 py-1 rounded cursor-not-allowed">
-                      Unavailable
+                    <button disabled className=" text-white px-3 py-1 rounded cursor-not-allowed">
+                      ❌
                     </button>
                   ) : (
                     <button
