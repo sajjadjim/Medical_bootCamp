@@ -16,7 +16,7 @@ const Contact = () => {
       {/* Contact Info and Form Grid */}
       <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Left - Contact Info */}
-        <div className="space-y-6 bg-indigo-50 p-8 rounded-2xl shadow-md">
+        <div className="space-y-6 bg-indigo-50  p-8 rounded-2xl shadow-xl">
           <div className="flex items-start gap-4">
             <FaMapMarkerAlt className="text-indigo-500 text-xl mt-1" />
             <div>
@@ -41,7 +41,7 @@ const Contact = () => {
         </div>
 
         {/* Right - Contact Form */}
-        <form className="space-y-6 bg-white p-8 rounded-2xl shadow-md">
+        <form className="space-y-6 bg-white p-8 rounded-2xl shadow-xl">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
             <input

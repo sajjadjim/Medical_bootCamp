@@ -19,7 +19,7 @@ const Section2 = () => {
             <div className="hero md:h-screen ">
                 <div className="hero-content flex-col lg:flex-row">
                     <img
-                        src="https://images.pexels.com/photos/7659565/pexels-photo-7659565.jpeg"
+                        src="https://hms.harvard.edu/sites/default/files/media/Students-1.png"
                         className="md:max-w-2xl rounded-lg shadow-2xl shadow-black
                         md:shadow-2xl md:shadow-black"
                     />
@@ -44,7 +44,7 @@ const Section2 = () => {
                         <p className="py-6">
                             As a freelancer or entrepreneur, starting your business is like planting a seed. It takes plenty of time and money. Then you have to nurture it without knowing when the tree will finally take root and provide for you in return. It could be tough but when your gig starts to flourish, it makes all the hard work and dedication worth it.
                         </p>
-                        <Link to='/browseTask' className="btn  text-white bg-indigo-500 hover:text-indigo-500 hover:bg-white hover:border-indigo-500" onClick={handleExploreMore}>Get Started</Link>
+                        <Link to='/availableBootcamp' className="btn  text-white bg-indigo-500 hover:text-indigo-500 hover:bg-white hover:border-indigo-500" onClick={handleExploreMore}>Get Started</Link>
                     </div>
                 </div>
         </div>

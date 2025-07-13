@@ -118,7 +118,7 @@ const Count = () => {
             {cardData.map(({ label, count, icon }) => (
                 <div
                     key={label}
-                    className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center border border-indigo-200 hover:shadow-indigo-400 transition-shadow duration-300"
+                    className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center border border-indigo-200 hover:shadow-indigo-400 transition-shadow hover:border-r-6  hover:border-b-3 hover:border-indigo-400 duration-300"
                 >
                     {icon}
                     <h2 className="text-lg font-semibold text-gray-700 mb-2">{label}</h2>

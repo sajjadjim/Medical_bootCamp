@@ -99,7 +99,7 @@ const AvailableBootcamp = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onFocus={() => {
-              if (searchTerm) setShowSuggestions(true);
+              setShowSuggestions(true);
             }}
             className="px-3 py-2 rounded-3xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 w-full md:w-64"
           />
@@ -194,28 +194,35 @@ const AvailableBootcamp = () => {
           {currentData.map((camp) => (
             <div
               key={camp._id}
-              className="bg-white rounded-lg shadow-2xl p-4 hover:shadow-lg border-r-6 border-b-3 border-indigo-400 transition"
+              className="relative bg-white border-0 rounded-lg shadow-2xl p-4 hover:shadow-lg  transition overflow-hidden group"
+              style={{ zIndex: 1 }}
             >
+              {/* Single animated line moving around the card */}
+              <span className="pointer-events-none absolute inset-0 z-10">
+                <span className="absolute top-0 left-0 w-full h-full">
+                  <span className="block absolute bg-gradient-to-r from-indigo-400 via-indigo-600 to-indigo-400 h-1 w-1/3 animate-border-line" />
+                </span>
+              </span>
               <img
                 src={camp.image}
                 alt={camp.campName}
-                className="w-full h-48 object-cover rounded mb-4"
+                className="w-full h-48 object-cover rounded mb-4 relative z-20"
               />
-              <h3 className="text-xl font-semibold text-indigo-600 mb-2">
+              <h3 className="text-xl font-semibold text-indigo-600 mb-2 relative z-20">
                 {camp.campName}
               </h3>
-              <p className="text-gray-600 mb-1">
+              <p className="text-gray-600 mb-1 relative z-20">
                 <strong>Fees:</strong> ৳{camp.campFees}
               </p>
-              <p className="text-gray-600 mb-1">
+              <p className="text-gray-600 mb-1 relative z-20">
                 <strong>Date:</strong>{" "}
                 {dayjs(camp.dateTime).format("MMMM D, YYYY h:mm A")}
               </p>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 mb-4 relative z-20">
                 <strong>Location:</strong> {camp.location}
               </p>
               <Link to={`/camps/${camp._id}`}>
-                <button className="px-4 py-2 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                <button className="px-4 py-2 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition relative z-20">
                   View Details
                 </button>
               </Link>
@@ -224,7 +231,55 @@ const AvailableBootcamp = () => {
         </div>
       )}
 
-      {/* Pagination */}
+      {/* Animated border line keyframes */}
+      <style>
+        {`
+        @keyframes border-line {
+          0% {
+            top: 0; left: 0; width: 33%; height: 4px; 
+            transform: none;
+          }
+          24% {
+            top: 0; left: 67%; width: 33%; height: 4px;
+            transform: none;
+          }
+          25% {
+            top: 0; left: 100%; width: 4px; height: 33%;
+            transform: none;
+          }
+          49% {
+            top: 67%; left: 100%; width: 4px; height: 33%;
+            transform: none;
+          }
+          50% {
+            top: 100%; left: 100%; width: 33%; height: 4px;
+            transform: rotate(180deg);
+          }
+          74% {
+            top: 100%; left: 0; width: 33%; height: 4px;
+            transform: rotate(180deg);
+          }
+          75% {
+            top: 100%; left: 0; width: 4px; height: 33%;
+            transform: rotate(180deg);
+          }
+          99% {
+            top: 0; left: 0; width: 4px; height: 33%;
+            transform: rotate(180deg);
+          }
+          100% {
+            top: 0; left: 0; width: 33%; height: 4px;
+            transform: none;
+          }
+        }
+        .animate-border-line {
+          position: absolute;
+          background: linear-gradient(90deg, #6366f1, #a5b4fc, #6366f1);
+          border-radius: 2px;
+          animation: border-line 8s linear infinite;
+        }
+        `}
+      </style>
       <div className="flex justify-center items-center gap-2 mt-8">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
