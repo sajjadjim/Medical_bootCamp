@@ -22,6 +22,8 @@ import RegisteredCamp from "../Pages/Dashboard/Participant Dashboard/Registered 
 import Payment from "../Pages/Dashboard/Participant Dashboard/Payment system/Payment";
 import PaymentHistory from "../Pages/Dashboard/Participant Dashboard/Payment History/PaymentHistory";
 import ParticipantProfile from "../Pages/Dashboard/Participant Dashboard/Participant Profile/ParticipantProfile";
+import OrganizerProfile from "../Pages/Dashboard/Organizer Dashboard/Organizer Profile/OrganizerProfile";
+import Admin from "../Routes/Admin";
 
 export const router = createBrowserRouter([
   {
@@ -82,21 +84,26 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'manage_registered_camps',
-        element: <ManageRegisteredCamp />,
+        element: <Admin><ManageRegisteredCamp /></Admin>,
         loader: () => fetch('http://localhost:3000/camps')
       },
       {
         path: 'addNewBootcamp',
-        element: <AddBootcamp></AddBootcamp>
+        element: <Admin><AddBootcamp></AddBootcamp></Admin>
       },
       {
         path: 'manageCamps',
-        element: <ManageCamps></ManageCamps>
+        element: <Admin><ManageCamps></ManageCamps></Admin>
       },
       {
         path: '/dashboard/registered-camps'
         , element: <RegisteredCamp></RegisteredCamp>
       },
+      {
+        path: 'organizer-profile',
+        element: <Admin><OrganizerProfile></OrganizerProfile></Admin>
+      }
+      ,
       {
         path: 'payment/:campId',
         Component: Payment

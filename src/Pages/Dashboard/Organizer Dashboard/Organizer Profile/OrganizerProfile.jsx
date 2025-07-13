@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import useAuth from '../../../../Hook/useAuth';
 import useAxiosSecure from '../../../../Hook/useAxiosSecure';
+import useAuth from '../../../../Hook/useAuth';
 
-const ParticipantProfile = () => {
-  const { user } = useAuth();
-  const axiosSecure = useAxiosSecure();
+
+const OrganizerProfile = () => {
+  const { user } = useAuth()
+  const axiosSecure = useAxiosSecure()
   const [fetchUser, setFetchUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState({
@@ -70,7 +71,7 @@ const ParticipantProfile = () => {
           />
           <h2 className="text-xl font-semibold">{fetchUser.name}</h2>
           <p className="text-sm text-gray-600">{fetchUser.email}</p>
-          {/* <p className="text-sm text-gray-600">User Role : {fetchUser.role}</p> */}
+          <p className="text-sm text-gray-600">User Role : {fetchUser.role}</p>
           <p className="text-sm text-gray-600">
             Joined: {new Date(fetchUser.created_at).toLocaleDateString()}
           </p>
@@ -175,4 +176,4 @@ const ParticipantProfile = () => {
   );
 };
 
-export default ParticipantProfile;
+export default OrganizerProfile;
