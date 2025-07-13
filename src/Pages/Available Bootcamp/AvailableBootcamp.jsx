@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { Link } from "react-router";
@@ -6,16 +6,24 @@ import { LayoutGrid, Table } from "lucide-react";
 
 const AvailableBootcamp = () => {
   const [bootcamps, setBootcamps] = useState([]);
+  const [filteredBootcamps, setFilteredBootcamps] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState("table"); // 'table' | 'card'
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const inputRef = useRef(null);
 
-  const rowsPerPage = 6;
+  const rowsPerPage = 7;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get("http://localhost:3000/camps");
-        setBootcamps(res.data);
+        const sorted = res.data.sort((a, b) =>
+          a.campName.localeCompare(b.campName)
+        );
+        setBootcamps(sorted);
+        setFilteredBootcamps(sorted);
       } catch (err) {
         console.error("Failed to fetch bootcamps", err);
       }
@@ -24,9 +32,29 @@ const AvailableBootcamp = () => {
     fetchData();
   }, []);
 
-  const totalPages = Math.ceil(bootcamps.length / rowsPerPage);
+  // Update filtered list and suggestions as user types
+  useEffect(() => {
+    if (!searchTerm) {
+      setFilteredBootcamps(bootcamps);
+      setShowSuggestions(false);
+      setCurrentPage(1);
+      return;
+    }
 
-  const currentData = bootcamps.slice(
+    const filtered = bootcamps
+      .filter((camp) =>
+        camp.campName.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .sort((a, b) => a.campName.localeCompare(b.campName));
+
+    setFilteredBootcamps(filtered);
+    setShowSuggestions(true);
+    setCurrentPage(1);
+  }, [searchTerm, bootcamps]);
+
+  const totalPages = Math.ceil(filteredBootcamps.length / rowsPerPage);
+
+  const currentData = filteredBootcamps.slice(
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
@@ -37,21 +65,79 @@ const AvailableBootcamp = () => {
     }
   };
 
+  const handleSuggestionClick = (campName) => {
+    setSearchTerm(campName);
+    setShowSuggestions(false);
+    setCurrentPage(1);
+  };
+
+  // Close suggestions if clicked outside input/suggestions
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <section className="py-25 px-4 max-w-10/12 mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold">Available Bootcamps</h2>
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+        <h2 className="md:text-5xl text-2xl font-bold">Available Bootcamps</h2>
+
+        <div className="relative w-full md:w-auto" ref={inputRef}>
+          <input
+            type="text"
+            placeholder="Search by camp name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onFocus={() => {
+              if (searchTerm) setShowSuggestions(true);
+            }}
+            className="px-3 py-2 rounded-3xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 w-full md:w-64"
+          />
+
+          {showSuggestions && filteredBootcamps.length > 0 && (
+            <ul className="absolute z-50 mt-1 max-h-48 w-full overflow-auto rounded border border-gray-300 bg-white shadow-lg">
+              {filteredBootcamps.slice(0, 8).map((camp) => (
+                <li
+                  key={camp._id}
+                  className="cursor-pointer px-4 py-2 hover:bg-indigo-600 hover:text-white"
+                  onClick={() => handleSuggestionClick(camp.campName)}
+                >
+                  {camp.campName}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
         <div className="flex space-x-2">
           <button
             onClick={() => setViewMode("table")}
-            className={`p-2 border cursor-pointer rounded ${viewMode === "table" ? "bg-indigo-600 text-white" : "bg-gray-200 hover:bg-gray-300"}`}
+            className={`p-2 border cursor-pointer rounded ${
+              viewMode === "table"
+                ? "bg-indigo-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
             title="Table View"
           >
             <Table size={20} />
           </button>
           <button
             onClick={() => setViewMode("card")}
-            className={`p-2 border rounded cursor-pointer ${viewMode === "card" ? "bg-indigo-600 text-white" : "bg-gray-200 hover:bg-gray-300"}`}
+            className={`p-2 border rounded cursor-pointer ${
+              viewMode === "card"
+                ? "bg-indigo-600 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
             title="Card View"
           >
             <LayoutGrid size={20} />
