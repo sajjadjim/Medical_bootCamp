@@ -31,6 +31,8 @@ const CampDetails = () => {
     );
   }
 
+  const isExpired = dayjs(camp.dateTime).isBefore(dayjs());
+
   return (
     <section className="py-10 px-4 max-w-4xl mx-auto">
       <div className="bg-white shadow-xl shadow-indigo-100 mt-20 rounded-xl overflow-hidden">
@@ -68,9 +70,18 @@ const CampDetails = () => {
             </div>
           </div>
 
-          <button className="mt-4 px-6 py-2 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
-            <Link to={`/registration/${campId.id}`}>Join Now</Link>
-          </button>
+          {isExpired ? (
+            <button
+              className="mt-4 px-6 py-2 bg-red-500 text-white rounded cursor-not-allowed"
+              disabled
+            >
+              Unavailable (Expired)
+            </button>
+          ) : (
+            <button className="mt-4 px-6 py-2 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+              <Link to={`/registration/${campId.id}`}>Join Now</Link>
+            </button>
+          )}
         </div>
       </div>
     </section>

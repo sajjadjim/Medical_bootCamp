@@ -92,10 +92,6 @@ const Register = () => {
                 navigate(from);
             });
         }
-        // update user profile in firebase
-        // update user profile in firebase
-        // console.log("User information:", userInfo);
-
     };
 
 
@@ -112,7 +108,7 @@ const Register = () => {
                     created_at: new Date().toISOString(),
                     last_log_in: new Date().toISOString()
                 }
-                // console.log(userInfo)
+                console.log(userInfo)
                 // console.log(user)
                 const userResponse = await axiosInstance.post('/users', userInfo)
                 console.log("User response:", userResponse.data);

@@ -21,6 +21,7 @@ import ManageCamps from "../Pages/Dashboard/Organizer Dashboard/Manage Camps/Man
 import RegisteredCamp from "../Pages/Dashboard/Participant Dashboard/Registered camp/RegisteredCamp";
 import Payment from "../Pages/Dashboard/Participant Dashboard/Payment system/Payment";
 import PaymentHistory from "../Pages/Dashboard/Participant Dashboard/Payment History/PaymentHistory";
+import ParticipantProfile from "../Pages/Dashboard/Participant Dashboard/Participant Profile/ParticipantProfile";
 
 export const router = createBrowserRouter([
   {
@@ -99,11 +100,15 @@ export const router = createBrowserRouter([
       {
         path: 'payment/:campId',
         Component: Payment
-      
+
       },
       {
-      path:'payment-history',
-      element: <PaymentHistory></PaymentHistory>
+        path: 'payment-history',
+        element: <PaymentHistory></PaymentHistory>
+      },
+      {
+        path: 'participant-profile',
+        element: <ParticipantProfile></ParticipantProfile>
       }
     ]
   }
