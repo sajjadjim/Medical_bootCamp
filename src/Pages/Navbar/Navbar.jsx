@@ -49,24 +49,6 @@ const Navbar = () => {
     toast("Logout successfully Done ❌");
   }
 
-  // const [users, setUsers] = useState([]);
-
-  //     // Data tank using TransStack query 
-  //   const { data: allUsers = [] } = useQuery({
-  //     queryKey: ['users'],
-  //     queryFn: async () => {
-  //       const res = await axiosSecure(`/users`);
-  //       return res.data;
-  //     }
-  //   });
-  //   React.useEffect(() => {
-  //     setUsers(allUsers);
-  //   }, [allUsers]);
-
-  // // console.log(users)
-  // const currentUser = users.find(u => u.email === user?.email);
-  // console.log("current user in navbar", users)
-
   const [dbUser, setDbUser] = useState([])
   // Filter Data From the Database From  userDatabase Information  Show the name
   useEffect(() => {
@@ -91,7 +73,6 @@ const Navbar = () => {
     }
   }, [user]);
 
-  // console.log(dbUser)
 
   const currentUser = dbUser.filter(db => db.email === user?.email)
   // const displayName =  dbUser.name 

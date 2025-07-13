@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../../Hook/useAuth';
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaUser } from "react-icons/fa";
 import { useNavigate } from 'react-router';
+import './style.css'
 
 const RegisteredCamp = () => {
   const { user } = useAuth();
@@ -40,37 +41,42 @@ const RegisteredCamp = () => {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {registeredCamps.map((camp) => (
-            <div
-              key={camp._id}
-              className="bg-white rounded-2xl  shadow-2xl  p-5 border border-gray-100 hover:shadow-lg transition duration-300"
-            >
-              <h3 className="text-xl font-semibold text-indigo-600 mb-2">{camp.campName}</h3>
-              <p className="text-gray-600 flex items-center gap-2"><FaUser /> {camp.participantName}</p>
-              <p className="text-gray-600 flex items-center gap-2"><FaEnvelope /> {camp.participantEmail}</p>
-              <p className="text-gray-600 flex items-center gap-2"><FaPhoneAlt /> {camp.phone}</p>
-              <p className="text-gray-600 flex items-center gap-2"><FaMapMarkerAlt /> {camp.location}</p>
-              <p className="text-gray-600">Age: <span className="font-medium">{camp.age}</span></p>
-              <p className="text-gray-600">Gender: <span className="font-medium">{camp.gender}</span></p>
-              <p className="text-gray-600">Camp Fee: <span className="font-semibold text-green-600">৳{camp.campFees}</span></p>
-              <div className="mt-3 flex justify-between">
-                <span className={`inline-block px-3 py-1 text-sm rounded-full font-medium
-                  ${camp.payment_status === 'paid' 
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-red-100 text-red-700'
-                  }`}
-                >
-                  {camp.payment_status === 'paid' ? 'Paid' : 'Unpaid'}
-                </span>
-                <span className={`inline-block px-3 py-1 text-sm rounded-full font-medium
-                  ${camp.payment_status === 'paid' 
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-red-100 text-red-700'
-                  }`}
-                >
-                  {camp.payment_status === 'paid' ? <p className=''>Done✔️</p> : <span className='cursor-pointer' onClick={()=>handlePayment(camp._id)}>Pay Now</span>}
-                </span>
+            <div className="animated-border-wrapper">
+              <div
+                key={camp._id}
+                className="bg-white rounded-2xl shadow-2xl p-5 border border-gray-100 hover:shadow-lg transition duration-300"
+              >
+                <h3 className="text-xl font-semibold text-indigo-600 mb-2">{camp.campName}</h3>
+                <p className="text-gray-600 flex items-center gap-2"><FaUser /> {camp.participantName}</p>
+                <p className="text-gray-600 flex items-center gap-2"><FaEnvelope /> {camp.participantEmail}</p>
+                <p className="text-gray-600 flex items-center gap-2"><FaPhoneAlt /> {camp.phone}</p>
+                <p className="text-gray-600 flex items-center gap-2"><FaMapMarkerAlt /> {camp.location}</p>
+                <p className="text-gray-600">Age: <span className="font-medium">{camp.age}</span></p>
+                <p className="text-gray-600">Gender: <span className="font-medium">{camp.gender}</span></p>
+                <p className="text-gray-600">Camp Fee: <span className="font-semibold text-green-600">৳{camp.campFees}</span></p>
+                <div className="mt-3 flex justify-between">
+                  <span className={`inline-block px-3 py-1 text-sm rounded-full font-medium
+        ${camp.payment_status === 'paid'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-red-100 text-red-700'
+                    }`}
+                  >
+                    {camp.payment_status === 'paid' ? 'Paid' : 'Unpaid'}
+                  </span>
+                  <span className={`inline-block px-3 py-1 text-sm rounded-full font-medium
+        ${camp.payment_status === 'paid'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-red-100 text-red-700'
+                    }`}
+                  >
+                    {camp.payment_status === 'paid'
+                      ? <p className=''>Done✔️</p>
+                      : <span className='cursor-pointer' onClick={() => handlePayment(camp._id)}>Pay Now</span>}
+                  </span>
+                </div>
               </div>
             </div>
+
           ))}
         </div>
       )}

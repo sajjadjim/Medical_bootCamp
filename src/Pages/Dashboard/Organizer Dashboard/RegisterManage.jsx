@@ -1,43 +1,59 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { use } from "react";
-import { AuthContext } from "../../../Auth/AuthContext";
+import { useEffect, useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../Hook/useAxiosSecure";
 import Swal from "sweetalert2";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const RegisterManage = () => {
   const [participants, setParticipants] = useState([]);
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
 
-  const { user } = use(AuthContext);
+  // Replace this with your actual auth context hook or logic
+  const user = { email: "sajjadjim15@gmail.com" };
   const userEmail = user?.email;
 
   const { data: registerCamps = [] } = useQuery({
-    queryKey: ['registrations'],
+    queryKey: ["registrations"],
     queryFn: async () => {
       const res = await axiosSecure.get(`/registrations`);
       return res.data;
     },
   });
 
-  // setParticipants(registerCamps)
-  // console.log("All the Data Register Camps", registerCamps);
   useEffect(() => {
-    const filtered = registerCamps.filter(camp => camp.ownerEmail === userEmail);
+    const filtered = registerCamps.filter((camp) => camp.ownerEmail === userEmail);
     setParticipants(filtered);
   }, [registerCamps, userEmail]);
-  // console.log("object", selectCapsDataFiltered);
 
+  const chartData = useMemo(() => {
+    const grouped = {};
+    participants.forEach(({ campName, payment_status }) => {
+      if (!grouped[campName]) {
+        grouped[campName] = { name: campName, paid: 0, unpaid: 0 };
+      }
+      if (payment_status === "paid") {
+        grouped[campName].paid += 1;
+      } else {
+        grouped[campName].unpaid += 1;
+      }
+    });
+    return Object.values(grouped);
+  }, [participants]);
 
-  // Delete participant
   const handleDelete = async (id) => {
-    console.log("object", id);
     try {
-
       Swal.fire({
         title: "Are you sure?",
-        text: "This parcel will be permanently deleted.",
+        text: "This registration will be permanently deleted.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -48,10 +64,10 @@ const RegisterManage = () => {
           try {
             const res = await axiosSecure.delete(`/registrations/${id}`);
             if (res.data.deletedCount > 0) {
-              Swal.fire("Deleted!", "Camp has been deleted.", "success");
-              // refetch(); // ✅ Refresh the camp list
+              Swal.fire("Deleted!", "Registration has been deleted.", "success");
+              setParticipants((prev) => prev.filter((p) => p._id !== id));
             } else {
-              Swal.fire("Failed", "Could not delete the camp.", "error");
+              Swal.fire("Failed", "Could not delete the registration.", "error");
             }
           } catch (error) {
             Swal.fire("Error", "Something went wrong!", "error");
@@ -59,72 +75,101 @@ const RegisterManage = () => {
           }
         }
       });
-      ;
-      // Remove from UI
-      setParticipants(prev => prev.filter(p => p._id !== id));
     } catch (err) {
       console.error("Error deleting participant:", err);
     }
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-7xl mx-auto">
       <h2 className="md:text-3xl text-xl font-semibold text-center mb-4">Registered Participants</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded-lg">
+
+      {/* Responsive table wrapper */}
+      <div className="overflow-x-auto mb-10 rounded-lg shadow-md border border-gray-200">
+        <table className="min-w-full bg-white rounded-lg">
           <thead className="bg-gray-100 text-gray-700">
             <tr>
-              <th className="px-4 py-2">Participant Name</th>
-              <th className="px-4 py-2">Gender</th>
-              <th className="px-4 py-2">Camp Name</th>
-              <th className="px-4 py-2">Location</th>
-              <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">Confirm</th>
-              <th className="px-4 py-2">Action</th>
+              <th className="px-4 py-3 text-left whitespace-nowrap">Participant Name</th>
+              <th className="px-4 py-3 text-left whitespace-nowrap">Gender</th>
+              <th className="px-4 py-3 text-left whitespace-nowrap">Camp Name</th>
+              <th className="px-4 py-3 text-left whitespace-nowrap">Location</th>
+              <th className="px-4 py-3 text-left whitespace-nowrap">Status</th>
+              <th className="px-4 py-3 text-left whitespace-nowrap">Confirm</th>
+              <th className="px-4 py-3 text-left whitespace-nowrap">Action</th>
             </tr>
           </thead>
           <tbody>
-            {participants.map((p) => (
-              <tr key={p._id} className="text-center border-t">
-                <td className="px-4 py-2">{p.participantName}</td>
-                <td className="px-4 py-2">{p.gender}</td>
-                <td className="px-4 py-2">{p.campName}</td>
-                <td className="px-4 py-2">{p.location}</td>
-                <td className="px-4 py-2">
-                  <span className={`px-2 py-1 rounded text-white ${p.payment_status === 'paid' ? 'bg-green-500' : 'bg-red-500'}`}>
-                    {p.payment_status}
-                  </span>
-                </td>
-                <td className="px-4 py-2">
-                  {p.payment_status === 'paid' ? (
-                    <span className="text-green-600 font-semibold">Confirm</span>
-                  ) : (
-                    <span className="text-yellow-600 font-semibold">Pending</span>
-                  )}
-                </td>
-                <td className="px-4 py-2">
-                  {p.payment_status === 'paid' ? (
-                    <button disabled className=" text-white px-3 py-1 rounded cursor-not-allowed">
-                      ❌
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleDelete(p._id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                    >
-                      Delete
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-            {participants.length === 0 && (
+            {participants.length === 0 ? (
               <tr>
-                <td colSpan="7" className="py-4 text-center text-gray-500">No registrations found.</td>
+                <td colSpan="7" className="py-4 text-center text-gray-500">
+                  No registrations found.
+                </td>
               </tr>
+            ) : (
+              participants.map((p) => (
+                <tr key={p._id} className="border-t hover:bg-indigo-50 transition-colors">
+                  <td className="px-4 py-3 whitespace-nowrap">{p.participantName}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">{p.gender}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">{p.campName}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">{p.location}</td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <span
+                      className={`px-2 py-1 rounded text-white ${
+                        p.payment_status === "paid" ? "bg-green-500" : "bg-red-500"
+                      }`}
+                    >
+                      {p.payment_status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap font-semibold">
+                    {p.payment_status === "paid" ? (
+                      <span className="text-green-600">Confirm</span>
+                    ) : (
+                      <span className="text-yellow-600">Pending</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {p.payment_status === "paid" ? (
+                      <button disabled className="text-gray-400 cursor-not-allowed px-3 py-1 rounded">
+                        ❌
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleDelete(p._id)}
+                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Chart container with responsive sizing */}
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <h3 className="text-xl font-semibold mb-4 text-center">Payment Status per BootCamp</h3>
+        {chartData.length === 0 ? (
+          <p className="text-center text-gray-500">No data to display.</p>
+        ) : (
+          <ResponsiveContainer width="100%" height={300} minWidth={300}>
+            <BarChart
+              data={chartData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="paid" stackId="a" fill="#4f46e5" name="Paid" />
+              <Bar dataKey="unpaid" stackId="a" fill="#a78bfa" name="Unpaid" />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </div>
   );

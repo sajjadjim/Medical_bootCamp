@@ -25,6 +25,7 @@ import ParticipantProfile from "../Pages/Dashboard/Participant Dashboard/Partici
 import OrganizerProfile from "../Pages/Dashboard/Organizer Dashboard/Organizer Profile/OrganizerProfile";
 import Admin from "../Routes/Admin";
 import Forbidden from "../Forbidden Page/Forbidden";
+import Analytics from "../Pages/Dashboard/Participant Dashboard/Analytics/Analytics";
 
 export const router = createBrowserRouter([
   {
@@ -121,6 +122,10 @@ Component : Forbidden
       {
         path: 'participant-profile',
         element: <ParticipantProfile></ParticipantProfile>
+      },
+      {
+        path:'analytics',
+        element :<Analytics></Analytics>
       }
     ]
   }

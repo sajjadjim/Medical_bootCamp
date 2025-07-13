@@ -1,0 +1,38 @@
+.animated-border-wrapper {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.animated-border-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: conic-gradient(
+    from 0deg,
+    #6366f1,
+    #a5b4fc,
+    #6366f1,
+    #a5b4fc,
+    #6366f1
+  );
+  animation: rotate-border 6s linear infinite;
+  z-index: -1;
+  border-radius: 1rem;
+  padding: 2px;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+}
+
+@keyframes rotate-border {
+  to {
+    transform: rotate(360deg);
+  }
+}

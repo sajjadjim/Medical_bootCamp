@@ -160,7 +160,6 @@ const ManageRegisteredCamp = () => {
           </div>
         </div>
       )}
-
       <RegisterManage />
     </div>
 
