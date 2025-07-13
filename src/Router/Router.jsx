@@ -24,6 +24,7 @@ import PaymentHistory from "../Pages/Dashboard/Participant Dashboard/Payment His
 import ParticipantProfile from "../Pages/Dashboard/Participant Dashboard/Participant Profile/ParticipantProfile";
 import OrganizerProfile from "../Pages/Dashboard/Organizer Dashboard/Organizer Profile/OrganizerProfile";
 import Admin from "../Routes/Admin";
+import Forbidden from "../Forbidden Page/Forbidden";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ export const router = createBrowserRouter([
         Component: Register
       }
     ]
+  },
+  {
+path: "/forbidden",
+Component : Forbidden
   },
   {
     path: "/dashboard",

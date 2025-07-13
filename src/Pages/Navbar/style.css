@@ -1,0 +1,35 @@
+a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 4px;
+
+  background: linear-gradient(
+    270deg,
+    #5c6ac4,  /* indigo-500 */
+    #4338ca,  /* indigo-700 */
+    #7c3aed,  /* purple-600 */
+    #4338ca,  /* indigo-700 */
+    #5c6ac4   /* indigo-500 */
+  );
+
+  background-size: 600% 600%;
+  border-radius: 2px;
+
+  animation: indigoGlow 8s ease-in-out infinite;
+}
+
+@keyframes indigoGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 600% 50%;
+  }
+}
+
+a.active:hover::after {
+  filter: drop-shadow(0 0 6px #5c6ac4);
+}
