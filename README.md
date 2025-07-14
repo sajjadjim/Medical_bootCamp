@@ -1,4 +1,3 @@
----
 🩺 Medical BootCamps
 Welcome to Medical BootCamps – an interactive platform built to empower individuals with fundamental medical knowledge and first-aid skills. Whether you're a healthcare enthusiast or just looking to be prepared in emergencies, our bootcamps provide hands-on and engaging content to help you learn effectively.
 
@@ -89,9 +88,7 @@ npm run dev
 Visit http://localhost:5173 in your browser.
 
 📂 Project Structure
-bash
-Copy
-Edit
+
 medical-bootcamps/
 ├── public/              # Static assets
 ├── src/
@@ -99,12 +96,13 @@ medical-bootcamps/
 │   ├── pages/           # Route-based pages
 │   ├── hooks/           # Custom React hooks
 │   ├── api/             # Axios config and API functions
-│   ├── context/         # React Contexts (Auth, Theme, etc.)
+│   ├── context/         # Auth, theme, etc.
 │   ├── assets/          # Images, animations
-│   └── App.jsx          # Main app component
-├── .eslintrc.cjs        # ESLint configuration
-├── vite.config.js       # Vite config
-└── package.json
+│   └── App.jsx          # Root component
+├── .eslintrc.cjs        # ESLint rules
+├── vite.config.js       # Vite configuration
+└── package.json         # Project metadata and dependencies
+
 🧪 Testing
 To run tests (if set up):
 
