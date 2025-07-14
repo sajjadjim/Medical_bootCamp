@@ -122,7 +122,7 @@ const Navbar = () => {
               ) : (
                 <Link
                   to="/auth/login"
-                  className="hidden md:flex items-center gap-1 hover:text-teal-500 transition relative font-medium"
+                  className="hidden md:flex text-gray-400 items-center gap-1 hover:text-teal-500 transition relative font-medium"
                 >
                   Join US
                 </Link>

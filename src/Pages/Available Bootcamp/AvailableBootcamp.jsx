@@ -1,48 +1,48 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import dayjs from "dayjs";
-import { Link } from "react-router";
+import { Link } from "react-router"; // ✅ Fixed import
 import { LayoutGrid, Table } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../Hook/useAxiosSecure";
 
 const AvailableBootcamp = () => {
-  const [bootcamps, setBootcamps] = useState([]);
+  const [bootCamps, setBootCamps] = useState([]);
   const [filteredBootcamps, setFilteredBootcamps] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewMode, setViewMode] = useState("table"); // 'table' | 'card'
+  const [viewMode, setViewMode] = useState("table");
   const [searchTerm, setSearchTerm] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef(null);
-
+  const axiosSecure = useAxiosSecure();
   const rowsPerPage = 7;
 
+  const { data: AllBootCamps = [], isSuccess } = useQuery({
+    queryKey: ['bootcamps'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/camps');
+      return res.data;
+    }
+  });
+
+  // Set initial bootcamps once data fetched
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("https://b11a12-server-side-sajjadjim.vercel.app/camps");
-        const sorted = res.data.sort((a, b) =>
-          a.campName.localeCompare(b.campName)
-        );
-        setBootcamps(sorted);
-        setFilteredBootcamps(sorted);
-      } catch (err) {
-        console.error("Failed to fetch bootcamps", err);
-      }
-    };
+    if (isSuccess) {
+      setBootCamps(AllBootCamps);
+      setFilteredBootcamps(AllBootCamps);
+    }
+  }, [AllBootCamps, isSuccess]);
 
-    fetchData();
-  }, []);
-
-  // Update filtered list and suggestions as user types
+  // Search filtering
   useEffect(() => {
     if (!searchTerm) {
-      setFilteredBootcamps(bootcamps);
+      setFilteredBootcamps(bootCamps);
       setShowSuggestions(false);
       setCurrentPage(1);
       return;
     }
 
-    const filtered = bootcamps
-      .filter((camp) =>
+    const filtered = bootCamps
+      .filter(camp =>
         camp.campName.toLowerCase().includes(searchTerm.toLowerCase())
       )
       .sort((a, b) => a.campName.localeCompare(b.campName));
@@ -50,10 +50,9 @@ const AvailableBootcamp = () => {
     setFilteredBootcamps(filtered);
     setShowSuggestions(true);
     setCurrentPage(1);
-  }, [searchTerm, bootcamps]);
+  }, [searchTerm, bootCamps]);
 
   const totalPages = Math.ceil(filteredBootcamps.length / rowsPerPage);
-
   const currentData = filteredBootcamps.slice(
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
@@ -71,20 +70,14 @@ const AvailableBootcamp = () => {
     setCurrentPage(1);
   };
 
-  // Close suggestions if clicked outside input/suggestions
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        inputRef.current &&
-        !inputRef.current.contains(event.target)
-      ) {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
         setShowSuggestions(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -98,9 +91,7 @@ const AvailableBootcamp = () => {
             placeholder="Search by camp name"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            onFocus={() => {
-              setShowSuggestions(true);
-            }}
+            onFocus={() => setShowSuggestions(true)}
             className="px-3 py-2 rounded-3xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-200 w-full md:w-64"
           />
 
@@ -179,7 +170,7 @@ const AvailableBootcamp = () => {
                   <td className="p-3">{camp.location}</td>
                   <td className="p-3">
                     <Link to={`/camps/${camp._id}`}>
-                      <button className="px-3 py-1 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                      <button className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
                         Details
                       </button>
                     </Link>
@@ -194,10 +185,9 @@ const AvailableBootcamp = () => {
           {currentData.map((camp) => (
             <div
               key={camp._id}
-              className="relative bg-white border-0 rounded-lg shadow-2xl p-4 hover:shadow-lg  transition overflow-hidden group"
+              className="relative bg-white border-0 rounded-lg shadow-2xl p-4 hover:shadow-lg transition overflow-hidden group"
               style={{ zIndex: 1 }}
             >
-              {/* Single animated line moving around the card */}
               <span className="pointer-events-none absolute inset-0 z-10">
                 <span className="absolute top-0 left-0 w-full h-full">
                   <span className="block absolute bg-gradient-to-r from-indigo-400 via-indigo-600 to-indigo-400 h-1 w-1/3 animate-border-line" />
@@ -222,7 +212,7 @@ const AvailableBootcamp = () => {
                 <strong>Location:</strong> {camp.location}
               </p>
               <Link to={`/camps/${camp._id}`}>
-                <button className="px-4 py-2 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition relative z-20">
+                <button className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition relative z-20">
                   View Details
                 </button>
               </Link>
@@ -280,11 +270,12 @@ const AvailableBootcamp = () => {
         }
         `}
       </style>
+      
       <div className="flex justify-center items-center gap-2 mt-8">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-3 py-1 bg-gray-200 cursor-pointer rounded hover:bg-gray-300 disabled:opacity-50"
+          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
         >
           Prev
         </button>
@@ -293,7 +284,7 @@ const AvailableBootcamp = () => {
           <button
             key={page}
             onClick={() => handlePageChange(page)}
-            className={`px-3 py-1 cursor-pointer rounded ${
+            className={`px-3 py-1 rounded ${
               currentPage === page
                 ? "bg-indigo-600 text-white"
                 : "bg-gray-200 hover:bg-gray-300"
