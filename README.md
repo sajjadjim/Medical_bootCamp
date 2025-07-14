@@ -1,12 +1,46 @@
-# React + Vite
+# Medical BootCamps
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to **Medical BootCamps**! This project is designed to help everyday people learn about essential medical skills and knowledge through interactive bootcamps.
 
-Currently, two official plugins are available:
+## Getting Started Locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Follow these steps to run the project on your local machine:
 
-## Expanding the ESLint configuration
+### 1. Clone the Repository
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+git clone https://github.com/your-username/medical-bootcamps.git
+cd medical-bootcamps
+```
+
+### 2. Install Dependencies
+
+Make sure you have [Node.js](https://nodejs.org/) installed. Then, install the required packages:
+
+```bash
+npm install
+```
+
+### 3. Start the Development Server
+
+```bash
+npm run dev
+```
+
+The app will be available at [http://localhost:5173](http://localhost:5173) (or the port shown in your terminal).
+
+## Main Packages Used
+
+- **React** – For building user interfaces
+- **Vite** – For fast development and build tooling
+- **ESLint** – For code quality and linting
+
+## Learn More
+
+- [React Documentation](https://react.dev/)
+- [Vite Documentation](https://vitejs.dev/)
+- [ESLint Documentation](https://eslint.org/)
+
+---
+
+Feel free to contribute or open issues to help improve Medical BootCamps!
