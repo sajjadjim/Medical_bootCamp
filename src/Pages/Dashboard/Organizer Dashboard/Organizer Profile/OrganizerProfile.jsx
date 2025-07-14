@@ -57,7 +57,13 @@ const OrganizerProfile = () => {
     }
   };
 
-  if (!fetchUser) return <p className="text-center mt-10">Loading...</p>;
+  if (!fetchUser)
+  return (
+    <div className="flex justify-center items-center mt-20">
+      <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
+
 
   return (
     <div className="relative">

@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 
 const Contact = () => {
+      useEffect(()=>{
+          document.title = "Contact Us";
+      })
   return (
     <div className="min-h-screen bg-white px-4 py-20 flex flex-col items-center">
       <div className="w-full max-w-4xl mx-auto text-center mb-12">

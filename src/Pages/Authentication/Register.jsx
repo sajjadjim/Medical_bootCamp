@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Auth/AuthContext";
 import registerLottie from '../../../src/assets/animation authentication/register.json';
 import useAuth from "../../Hook/useAuth";
-import useAxios from "../../Hook/useAxios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { Link, useLocation } from "react-router";
@@ -11,6 +10,7 @@ import { useNavigate } from "react-router";
 import Lottie from 'lottie-react';
 import { toast } from "react-toastify";
 import { Brain } from 'lucide-react';
+import useAxiosSecure from "../../Hook/useAxiosSecure";
 
 const Register = () => {
     const {
@@ -20,7 +20,7 @@ const Register = () => {
         formState: { errors },
     } = useForm();
     // axios secure the from react the data from the server 
-    const axiosInstance = useAxios();
+    const axiosSecure = useAxiosSecure()
     const [profilePic, setProfilePic] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -54,7 +54,7 @@ const Register = () => {
             last_log_in: new Date().toISOString()
         }
         // Data inserted to the mongoDB 
-        const userResponse = await axiosInstance.post('/users', userInfo)
+        const userResponse = await axiosSecure.post('/users', userInfo)
         console.log("User response:", userResponse.data);
 
         const insertedId = userResponse?.data?.insertedId || userResponse?.data?.data?.insertedId;
@@ -70,7 +70,7 @@ const Register = () => {
             .catch(error => {
                 console.log(error)
             })
-        if (!insertedId) {
+        if (insertedId) {
             // setErrorMessage("");
             import("sweetalert2").then(Swal => {
                 Swal.default.fire({
@@ -112,7 +112,6 @@ const Register = () => {
                 // console.log(user)
                 const userResponse = await axiosInstance.post('/users', userInfo)
                 console.log("User response:", userResponse.data);
-
                 // const user = result.user;
                 // console.log('Google User:', user);
                 toast.success("Signed in with Google ✅");

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
 import { FaUsers, FaChalkboardTeacher, FaClipboardList } from 'react-icons/fa';
-import useAuth from '../../../Hook/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import useFreeAxios from '../../../Hook/useAxios';
 
 const Count = () => {
     const [userCount, setUserCount] = useState(0);
     const [bootcampCount, setBootcampCount] = useState(0);
     const [registrationCount, setRegistrationCount] = useState(0);
     const [loading, setLoading] = useState(true);
-    const { user } = useAuth();
+    const axiosInstance = useFreeAxios()
 
     useEffect(() => {
         setLoading(true);
@@ -19,82 +20,37 @@ const Count = () => {
             setLoading(false);
         }, 1000);
     }, []);
-    const [dbUser, setDbUser] = useState([])
-    // Filter Data From the Database From  userDatabase Information  Show the name
-    useEffect(() => {
-        const accessToken = user?.accessToken;
-        // console.log(accessToken)
-        if (accessToken) {
-            fetch('https://b11a12-server-side-sajjadjim.vercel.app/users',
-                {
-                    headers: {
-                        authorization: `Bearer ${accessToken}`
-                    }
-                }
-            )
-                .then(res => res.json())
-                .then(data => {
-                    setDbUser(data);
-                    // console.log(data)
-                })
-                .catch(error => {
-                    console.error('Error fetching users:', error);
-                });
-        }
-    }, [user]);
-    const userNumbers = dbUser.length;
 
-    const [registrations, setRegistrations] = useState([])
-    // Filter Data From the Database From  userDatabase Information  Show the name
-    useEffect(() => {
-        const accessToken = user?.accessToken;
-        // console.log(accessToken)
-        if (accessToken) {
-            fetch('https://b11a12-server-side-sajjadjim.vercel.app/registrations',
-                {
-                    headers: {
-                        authorization: `Bearer ${accessToken}`
-                    }
-                }
-            )
-                .then(res => res.json())
-                .then(data => {
-                    setRegistrations(data);
-                    // console.log(data)
-                })
-                .catch(error => {
-                    console.error('Error fetching users:', error);
-                });
-        }
-    }, [user]);
-    const registrationNumbers = registrations.length;
+    // Fetch camps count
+    const { data: campsData } = useQuery({
+        queryKey: ['camps'],
+        queryFn: async () => {
+            const res = await axiosInstance.get('/camps/stats/count');
+            return res.data;
+        },
+    });
+    // console.log("Number of Camps :", campsData);
+    const campsNumber = campsData?.totalCamps || 0;
 
-    const [camps, setCamps] = useState([])
-    // Filter Data From the Database From  userDatabase Information  Show the name
-    useEffect(() => {
-        const accessToken = user?.accessToken;
-        // console.log(accessToken)
-        if (accessToken) {
-            fetch('https://b11a12-server-side-sajjadjim.vercel.app/camps',
-                {
-                    headers: {
-                        authorization: `Bearer ${accessToken}`
-                    }
-                }
-            )
-                .then(res => res.json())
-                .then(data => {
-                    setCamps(data);
-                    // console.log(data)
-                })
-                .catch(error => {
-                    console.error('Error fetching users:', error);
-                });
-        }
-    }, [user]);
-    const campsNumber = camps.length;
-
-
+    // Fetch camps count
+    const { data: registrationData } = useQuery({
+        queryKey: ['registrations'],
+        queryFn: async () => {
+            const res = await axiosInstance.get('/registrations/stats/count');
+            return res.data;
+        },
+    });
+    // console.log("Number of Camps :", registrationData);
+    const registrationNumbers = registrationData?.totalRegistrations || 0;
+    // Fetch camps count
+    const { data: usersData } = useQuery({
+        queryKey: ['users'],
+        queryFn: async () => {
+            const res = await axiosInstance.get('/users/stats/count');
+            return res.data;
+        },
+    });
+    const userNumbers = usersData?.totalUsers || 0;
     const cardData = [
         {
             label: 'Users',

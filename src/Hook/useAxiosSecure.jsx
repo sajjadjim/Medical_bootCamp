@@ -17,7 +17,6 @@ const useAxiosSecure = () => {
         async (config) => {
           if (user) {
             const token = await user.getIdToken();
-            // console.log(`Token: ${token}`);
             config.headers.Authorization = `Bearer ${token}`;
           }
           return config;

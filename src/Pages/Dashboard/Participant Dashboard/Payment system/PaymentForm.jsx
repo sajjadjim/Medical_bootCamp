@@ -37,7 +37,6 @@ const PaymentForm = () => {
     const amountInCents = amount * 100; // Convert to cents for Stripe
     // console.log("Amount in Cents", amountInCents)
 
-
     // control here the form submit button data for payment method system 
     const handleSubmit = async (e) => {
         e.preventDefault();

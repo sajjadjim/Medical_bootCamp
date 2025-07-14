@@ -7,11 +7,12 @@ import { FaCalendarAlt, FaUsers } from 'react-icons/fa';
 const Section3 = () => {
   const [bootcamps, setBootcamps] = useState([]);
 
+
   useEffect(() => {
     // Simulated API call: Replace with your API endpoint
     const fetchData = async () => {
       try {
-        const res = await axios.get("https://b11a12-server-side-sajjadjim.vercel.app/camps"); // <-- your API
+        const res = await axios.get("https://b11a12-server-side-sajjadjim.vercel.app/camps/top/6"); // <-- your API
         const sorted = res.data
           .sort((a, b) => b.totalCount - a.totalCount)
           .slice(0, 6);
