@@ -9,7 +9,7 @@ const Count = () => {
     const [bootcampCount, setBootcampCount] = useState(0);
     const [registrationCount, setRegistrationCount] = useState(0);
     const [loading, setLoading] = useState(true);
-    const axiosInstance = useFreeAxios()
+    const axiosInstance = useFreeAxios();
 
     useEffect(() => {
         setLoading(true);
@@ -21,7 +21,6 @@ const Count = () => {
         }, 1000);
     }, []);
 
-    // Fetch camps count
     const { data: campsData } = useQuery({
         queryKey: ['camps'],
         queryFn: async () => {
@@ -29,10 +28,7 @@ const Count = () => {
             return res.data;
         },
     });
-    // console.log("Number of Camps :", campsData);
-    const campsNumber = campsData?.totalCamps || 0;
 
-    // Fetch camps count
     const { data: registrationData } = useQuery({
         queryKey: ['registrations'],
         queryFn: async () => {
@@ -40,9 +36,7 @@ const Count = () => {
             return res.data;
         },
     });
-    // console.log("Number of Camps :", registrationData);
-    const registrationNumbers = registrationData?.totalRegistrations || 0;
-    // Fetch camps count
+
     const { data: usersData } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
@@ -50,33 +44,43 @@ const Count = () => {
             return res.data;
         },
     });
+
     const userNumbers = usersData?.totalUsers || 0;
+    const campsNumber = campsData?.totalCamps || 0;
+    const registrationNumbers = registrationData?.totalRegistrations || 0;
+
     const cardData = [
         {
             label: 'Users',
-            count: userNumbers, // use the dynamic usersNumber from db
-            icon: <FaUsers className="text-indigo-600 w-12 h-12 mb-4" />,
+            count: userNumbers,
+            icon: <FaUsers className="text-white w-8 h-8" />,
+            bg: 'bg-indigo-600',
         },
         {
             label: 'BootCamps',
             count: campsNumber,
-            icon: <FaChalkboardTeacher className="text-indigo-600 w-12 h-12 mb-4" />,
+            icon: <FaChalkboardTeacher className="text-white w-8 h-8" />,
+            bg: 'bg-green-600',
         },
         {
             label: 'Registrations',
             count: registrationNumbers,
-            icon: <FaClipboardList className="text-indigo-600 w-12 h-12 mb-4" />,
+            icon: <FaClipboardList className="text-white w-8 h-8" />,
+            bg: 'bg-pink-600',
         },
     ];
 
     return (
         <div className="max-w-5xl mx-auto px-4 md:mb-10 grid grid-cols-1 md:grid-cols-3 gap-8">
-            {cardData.map(({ label, count, icon }) => (
+            {cardData.map(({ label, count, icon, bg }) => (
                 <div
                     key={label}
-                    className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center text-center border border-indigo-200 hover:shadow-indigo-400 transition-shadow hover:border-r-6  hover:border-b-3 hover:border-indigo-400 duration-300"
+                    className="bg-white rounded-xl shadow-xl p-8 flex flex-col items-center text-center border border-gray-200 hover:shadow-indigo-300 transition-all duration-300 group"
                 >
-                    {icon}
+                    {/* Decorative Icon Badge */}
+                    <div className={`rounded-full p-4 ${bg} mb-4 shadow-lg group-hover:scale-110 transition`}>
+                        {icon}
+                    </div>
                     <h2 className="text-lg font-semibold text-gray-700 mb-2">{label}</h2>
                     {loading ? (
                         <div className="text-3xl font-extrabold text-indigo-600 animate-pulse">Loading...</div>

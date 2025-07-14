@@ -127,7 +127,7 @@ const Navbar = () => {
               )
             }
             {/* Mobile Toggle */}
-            <div className="md:hidden">
+            <div className="md:hidden text-white">
               <button onClick={toggleMenu} aria-label="Toggle menu">
                 {isOpen ? <X size={28} /> : <Menu size={28} />}
               </button>
@@ -138,7 +138,7 @@ const Navbar = () => {
           <div
             className={`
     md:hidden fixed top-14 left-0 w-full bg-white text-black rounded-4xl mx-3 z-40 transition-all duration-700
-    ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
+    ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-100 overflow-hidden'}
   `}
             style={{ willChange: 'max-height, opacity' }}
           >
