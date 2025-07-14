@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { Menu, X, Home, User, LayoutDashboard, ClipboardList, BarChart2, FileText, Settings } from "lucide-react";
 import { NavLink, Outlet } from "react-router";
 import useUserRole from "../Hook/useUserRole";
 import useAuth from "../Hook/useAuth";
 
 const Dashboard = () => {
+  useEffect(() => {
+    document.title = "Dashboard";
+  });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { role, roleLoading } = useUserRole();
   const { loading } = useAuth();

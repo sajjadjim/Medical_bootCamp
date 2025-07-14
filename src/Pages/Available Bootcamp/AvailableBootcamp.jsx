@@ -6,6 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hook/useAxiosSecure";
 
 const AvailableBootcamp = () => {
+  useEffect(()=>{
+    document.title = "Available BootCamps";
+  })
   const [bootCamps, setBootCamps] = useState([]);
   const [filteredBootcamps, setFilteredBootcamps] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);

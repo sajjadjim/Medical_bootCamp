@@ -3,7 +3,7 @@ import axios from 'axios';
 import useAuth from './useAuth';
 
 const axiosSecure = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://b11a12-server-side-sajjadjim.vercel.app',
 });
 
 const useAxiosSecure = () => {

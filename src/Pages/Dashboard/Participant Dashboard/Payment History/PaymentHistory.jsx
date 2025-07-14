@@ -16,7 +16,11 @@ const PaymentHistory = () => {
         }
     });
 
-    if (isLoading) return <div className="text-center mt-10 text-lg">Loading Data...</div>;
+    if (isLoading)  return (
+    <div className="flex justify-center items-center mt-20">
+      <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
 
    return (
   <div className="p-4 max-w-7xl mx-auto font-inter">
