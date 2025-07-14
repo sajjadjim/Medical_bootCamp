@@ -48,17 +48,17 @@ export const router = createBrowserRouter([
       {
         path: 'availableBootcamp',
         element: <PrivateRoute><AvailableBootcamp /></PrivateRoute>,
-        loader: () => fetch('http://localhost:3000/camps') // Load all camps data
+        loader: () => fetch('https://b11a12-server-side-sajjadjim.vercel.app/camps') // Load all camps data
       },
       {
         path: '/camps/:id',
         element: <CampDetails />,
-        loader: ({ params }) => fetch(`http://localhost:3000/camps/${params.id}`)
+        loader: ({ params }) => fetch(`https://b11a12-server-side-sajjadjim.vercel.app/camps/${params.id}`)
       },
       {
         path: '/registration/:id',
         element: <CampRegistrationForm />,
-        loader: ({ params }) => fetch(`http://localhost:3000/camps/${params.id}`)
+        loader: ({ params }) => fetch(`https://b11a12-server-side-sajjadjim.vercel.app/camps/${params.id}`)
       }
     ]
   },
@@ -91,7 +91,7 @@ Component : Forbidden
       {
         path: 'manage_registered_camps',
         element: <Admin><ManageRegisteredCamp /></Admin>,
-        loader: () => fetch('http://localhost:3000/camps')
+        loader: () => fetch('https://b11a12-server-side-sajjadjim.vercel.app/camps')
       },
       {
         path: 'addNewBootcamp',

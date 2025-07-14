@@ -18,7 +18,7 @@ const AvailableBootcamp = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/camps");
+        const res = await axios.get("https://b11a12-server-side-sajjadjim.vercel.app/camps");
         const sorted = res.data.sort((a, b) =>
           a.campName.localeCompare(b.campName)
         );

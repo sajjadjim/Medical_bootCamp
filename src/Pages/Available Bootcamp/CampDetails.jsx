@@ -11,7 +11,7 @@ const CampDetails = () => {
   useEffect(() => {
     const fetchCamp = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/camps/${campId.id}`); // <-- your API
+        const res = await axios.get(`https://b11a12-server-side-sajjadjim.vercel.app/camps/${campId.id}`); // <-- your API
         setCamp(res.data);
       } catch (err) {
         console.error("Failed to fetch camp details", err);

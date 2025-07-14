@@ -25,7 +25,7 @@ const Count = () => {
         const accessToken = user?.accessToken;
         // console.log(accessToken)
         if (accessToken) {
-            fetch('http://localhost:3000/users',
+            fetch('https://b11a12-server-side-sajjadjim.vercel.app/users',
                 {
                     headers: {
                         authorization: `Bearer ${accessToken}`
@@ -50,7 +50,7 @@ const Count = () => {
         const accessToken = user?.accessToken;
         // console.log(accessToken)
         if (accessToken) {
-            fetch('http://localhost:3000/registrations',
+            fetch('https://b11a12-server-side-sajjadjim.vercel.app/registrations',
                 {
                     headers: {
                         authorization: `Bearer ${accessToken}`
@@ -75,7 +75,7 @@ const Count = () => {
         const accessToken = user?.accessToken;
         // console.log(accessToken)
         if (accessToken) {
-            fetch('http://localhost:3000/camps',
+            fetch('https://b11a12-server-side-sajjadjim.vercel.app/camps',
                 {
                     headers: {
                         authorization: `Bearer ${accessToken}`
