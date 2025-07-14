@@ -17,10 +17,17 @@ const CampRegistrationForm = () => {
   } = useForm();
 
   const [camp, setCamp] = useState([]);
+
   useEffect(() => {
     const fetchCamp = async () => {
       try {
-        const res = await axios.get(`https://b11a12-server-side-sajjadjim.vercel.app/camps/${id}`); // <-- your API
+        const res = await axios.get(`https://b11a12-server-side-sajjadjim.vercel.app/camps/${id}`,
+          {
+            headers:{
+              'Authorization': `Bearer ${user?.accessToken}`
+            }
+          }
+        ); // <-- your API
         setCamp(res.data);
       } catch (err) {
         console.error("Failed to fetch camp details", err);
@@ -96,7 +103,7 @@ const CampRegistrationForm = () => {
             confirmButtonColor: "#6366f1"
           }).then(() => {
             // Redirect to dashboard after feedback
-            window.location.href = "/dashboard";
+            window.location.href = "/dashboard/registered-camps";
           });
         } catch (error) {
           Swal.fire({
@@ -116,7 +123,13 @@ const CampRegistrationForm = () => {
     // Increment totalParticipant for the camp after registration
     const registerForCamp = async (campId) => {
       try {
-        const res = await axios.post(`http://localhost:5000/camps/${campId}`);
+        const res = await axios.post(`http://localhost:3000/camps/${campId}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${user?.accessToken}`
+            }
+          }
+        );
         console.log(res.data.message);
         console.log(res.data.camp); // updated camp data
       } catch (err) {
@@ -124,9 +137,38 @@ const CampRegistrationForm = () => {
       }
     };
     registerForCamp(id);
-    // console.log("Registration from data:", registrationData);
-    // Here you can call your API to submit data
   };
+
+
+  const [dbUser, setDbUser] = useState([])
+    useEffect(() => {
+      const accessToken = user?.accessToken;
+      // console.log(accessToken)
+      if (accessToken) {
+        fetch('https://b11a12-server-side-sajjadjim.vercel.app/users',
+          {
+            headers: {
+              authorization: `Bearer ${accessToken}`
+            }
+          }
+        )
+          .then(res => res.json())
+          .then(data => {
+            setDbUser(data);
+            // console.log(data)
+          })
+          .catch(error => {
+            console.error('Error fetching users:', error);
+          });
+      }
+    }, [user]);
+  
+  
+    const currentUser = dbUser.filter(db => db.email === user?.email)
+    // console.log(" Current user ", currentUser)
+    // const displayName =  dbUser.name \
+    const name = currentUser[0]?.name || user?.displayName || 'No Name';
+    const email = currentUser[0]?.email || user?.email || 'No Email';
 
   return (
     <div className="md:w-9/12 mx-auto p-4 my-25 bg-white shadow-2xl rounded-xl">
@@ -183,7 +225,7 @@ const CampRegistrationForm = () => {
           <label className="block text-sm font-medium">Participant Name</label>
           <input
             type="text"
-            value={user?.displayName || ""}
+            value={name || ""}
             readOnly
             className="w-full px-4 py-3 mt-2 text-gray-400 rounded-xl bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
           />
@@ -193,7 +235,7 @@ const CampRegistrationForm = () => {
           <label className="block text-sm font-medium">Participant Email</label>
           <input
             type="email"
-            value={user?.email || ""}
+            value={email || ""}
             readOnly
             className="w-full px-4 py-3 mt-2 text-gray-400 rounded-xl bg-gradient-to-r from-purple-50 via-pink-50 to-purple-50 shadow-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
           />

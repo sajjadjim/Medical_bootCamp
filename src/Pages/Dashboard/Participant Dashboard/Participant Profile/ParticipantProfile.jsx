@@ -57,11 +57,15 @@ const ParticipantProfile = () => {
     }
   };
 
-  if (!fetchUser) return <p className="text-center mt-10">Loading...</p>;
+   if (!fetchUser)
+  return (
+    <div className="flex justify-center items-center mt-20">
+      <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  );
 
   return (
     <div className="relative">
-
       <div className="max-w-md mx-auto mt-10 p-6 rounded-xl shadow-2xl shadow-indigo-100 bg-white text-black z-0">
         <div className="flex flex-col items-center gap-4">
           <img
@@ -99,8 +103,6 @@ const ParticipantProfile = () => {
           </button>
         </div>
       </div>
-
-
       {editMode && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50 transition-all duration-300">
           <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl relative transition-all duration-300">

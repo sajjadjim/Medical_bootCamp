@@ -153,7 +153,7 @@ const AvailableBootcamp = () => {
               {currentData.map((camp) => (
                 <tr
                   key={camp._id}
-                  className="border-b border-indigo-200 hover:bg-indigo-50 transition"
+                  className="border-b border-indigo-200 hover:bg-indigo-50  hover:border-r-7 hover:border-b-4 transition duration-400 "
                 >
                   <td className="p-3">
                     <img
@@ -170,7 +170,7 @@ const AvailableBootcamp = () => {
                   <td className="p-3">{camp.location}</td>
                   <td className="p-3">
                     <Link to={`/camps/${camp._id}`}>
-                      <button className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                      <button className="px-3 py-1 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
                         Details
                       </button>
                     </Link>
@@ -212,7 +212,7 @@ const AvailableBootcamp = () => {
                 <strong>Location:</strong> {camp.location}
               </p>
               <Link to={`/camps/${camp._id}`}>
-                <button className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition relative z-20">
+                <button className="px-4 py-2 cursor-pointer bg-indigo-600 text-white rounded hover:bg-indigo-700 transition relative z-20">
                   View Details
                 </button>
               </Link>
@@ -275,7 +275,7 @@ const AvailableBootcamp = () => {
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          className="px-3 py-1 bg-gray-200 cursor-pointer rounded hover:bg-gray-300 disabled:opacity-50"
         >
           Prev
         </button>
@@ -284,7 +284,7 @@ const AvailableBootcamp = () => {
           <button
             key={page}
             onClick={() => handlePageChange(page)}
-            className={`px-3 py-1 rounded ${
+            className={`px-3 cursor-pointer py-1 rounded ${
               currentPage === page
                 ? "bg-indigo-600 text-white"
                 : "bg-gray-200 hover:bg-gray-300"
@@ -297,7 +297,7 @@ const AvailableBootcamp = () => {
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          className="px-3 py-1 cursor-pointer bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
         >
           Next
         </button>

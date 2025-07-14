@@ -59,12 +59,12 @@ const Count = () => {
         },
         {
             label: 'BootCamps',
-            count: registrationNumbers,
+            count: campsNumber,
             icon: <FaChalkboardTeacher className="text-indigo-600 w-12 h-12 mb-4" />,
         },
         {
             label: 'Registrations',
-            count: campsNumber,
+            count: registrationNumbers,
             icon: <FaClipboardList className="text-indigo-600 w-12 h-12 mb-4" />,
         },
     ];

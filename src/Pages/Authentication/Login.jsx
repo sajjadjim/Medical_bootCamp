@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../Hook/useAuth";
 import { toast } from "react-toastify";
@@ -10,6 +10,9 @@ import registerLottie from '../../../src/assets/animation authentication/login.j
 import Lottie from 'lottie-react';
 
 const Login = () => {
+    useEffect(()=>{
+        document.title = "Login"
+    })
     const { signInWithGoogle, signIn } = useAuth();
     const {
         register,
@@ -17,7 +20,6 @@ const Login = () => {
         formState: { errors },
     } = useForm();
     const location = useLocation()
-    // console.log(location)
     const navigate = useNavigate()
 
     const onSubmit = (data) => {
@@ -54,7 +56,7 @@ const Login = () => {
     };
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100 px-4">
-            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-5xl shadow-indigo-400 w-full max-w-sm sm:max-w-md transition-all duration-300">
+            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl shadow-indigo-400 w-full max-w-sm sm:max-w-md transition-all duration-300">
                 <span className=" justify-center grid"><Lottie className='w-25' animationData={registerLottie} loop={true}></Lottie></span>
                 <div className="text-2xl  flex sm:text-3xl  items-center font-bold mb-6 text-center text-blue-600"><Link to='/'><Brain></Brain></Link> <span className="text-center ml-30"> Login</span></div>
 
@@ -107,10 +109,10 @@ const Login = () => {
                 {/* Google Sign-In */}
                 <button
                     onClick={handleGoogleLogin}
-                    className="w-full flex cursor-pointer items-center justify-center border py-2 rounded-md hover:bg-gray-100 transition-all"
+                    className="mt-2 w-full flex items-center justify-center gap-2 rounded-xl py-2 bg-gradient-to-r from-indigo-500 via-pink-80 to-indigo-100 text-shadow-black font-semibold cursor-pointer shadow-md placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-white"
                 >
                     <FcGoogle className="mr-3" />
-                    Sign in with Google
+                    Log in with Google
                 </button>
                 <p className="text-center mt-2">Create an account <Link to='/auth/register' className="border-b  border-blue-500 text-blue-500">register</Link></p>
             </div>

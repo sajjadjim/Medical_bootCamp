@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Auth/AuthContext";
 import registerLottie from '../../../src/assets/animation authentication/register.json';
 import useAuth from "../../Hook/useAuth";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash  } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 import { Link, useLocation } from "react-router";
 import { useNavigate } from "react-router";
@@ -13,6 +14,9 @@ import { Brain } from 'lucide-react';
 import useAxiosSecure from "../../Hook/useAxiosSecure";
 
 const Register = () => {
+     useEffect(()=>{
+            document.title = "Register"
+        })
     const {
         register,
         handleSubmit,
@@ -103,14 +107,14 @@ const Register = () => {
                 const userInfo = {
                     email: user.email
                     , name: user.displayName || "No Name",
-                    image: user.photoURL || "https://www.svgrepo.com/show/475676/user.svg",
+                    image: user.photoURL || "https://cdn-icons-png.freepik.com/512/6858/6858485.png",
                     role: "participant",
                     created_at: new Date().toISOString(),
                     last_log_in: new Date().toISOString()
                 }
-                console.log(userInfo)
+                // console.log(userInfo)
                 // console.log(user)
-                const userResponse = await axiosInstance.post('/users', userInfo)
+                const userResponse = await axiosSecure.post('/users', userInfo)
                 console.log("User response:", userResponse.data);
                 // const user = result.user;
                 // console.log('Google User:', user);
@@ -136,8 +140,8 @@ const Register = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-200 px-4">
-            <div className="w-full max-w-md bg-white rounded-xl shadow-2xl p-5 ">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100 px-4">
+            <div className="w-full max-w-md bg-white rounded-xl shadow-2xl shadow-indigo-300 p-5 ">
                 <h2 className="text-2xl font-bold text-center text-gray-800"><Link to='/'><Brain className="text-indigo-500"></Brain></Link> Register</h2>
                 <div className="text-center grid justify-center"> <Lottie className='w-25' animationData={registerLottie} loop={true}></Lottie></div>
                 {errorMessage && (
@@ -145,6 +149,7 @@ const Register = () => {
                         {errorMessage}
                     </div>
                 )}
+                <p className="text-center font-bold text-2xl my-2 ">Create a Account</p>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 ">User Name</label>
@@ -231,7 +236,7 @@ const Register = () => {
                         onClick={handleGoogleSignUp}
                         className="mt-2 w-full flex items-center justify-center gap-2 rounded-xl py-2 bg-gradient-to-r from-indigo-500 via-pink-80 to-indigo-100 text-shadow-black font-semibold cursor-pointer shadow-md placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-white"
                     >
-                        <img src="https://www.svgrepo.com/show/47565</svg>6/google-color.svg" alt="Google" className="w-5 h-5 cursor-pointer" />
+                       <FcGoogle className="mr-3" />
                         Sign up with Google
                     </button>
                 </div>

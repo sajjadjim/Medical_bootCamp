@@ -3,15 +3,25 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { useParams } from "react-router";
 import { Link } from "react-router";
+import useAuth from "../../Hook/useAuth";
 
 const CampDetails = () => {
   const  campId  = useParams() // get id from route param
   const [camp, setCamp] = useState(null);
+  const {user} = useAuth();
+  const accessToken = user?.accessToken;
+  // console.log("Access Token:", accessToken);
 
   useEffect(() => {
     const fetchCamp = async () => {
       try {
-        const res = await axios.get(`https://b11a12-server-side-sajjadjim.vercel.app/camps/${campId.id}`); // <-- your API
+        const res = await axios.get(`https://b11a12-server-side-sajjadjim.vercel.app/camps/${campId.id}`,
+           {
+          headers: {
+            authorization: `Bearer ${accessToken}`
+          }
+        }
+        ); // <-- your API
         setCamp(res.data);
       } catch (err) {
         console.error("Failed to fetch camp details", err);
@@ -19,6 +29,10 @@ const CampDetails = () => {
     };
     fetchCamp();
   }, [campId]);
+
+
+
+
 
   if (!camp) {
     return (

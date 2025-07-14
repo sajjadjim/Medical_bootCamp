@@ -38,9 +38,7 @@ const Navbar = () => {
   const handleLinkClick = () => {
     if (window.innerWidth < 768) setIsOpen(false);
   };
-
   // Firebase All Operation here work 
-
   const handleLogOut = () => {
     logOut().then(() => {
     }).catch((error) => {
@@ -53,7 +51,6 @@ const Navbar = () => {
   // Filter Data From the Database From  userDatabase Information  Show the name
   useEffect(() => {
     const accessToken = user?.accessToken;
-    // console.log(accessToken)
     if (accessToken) {
       fetch('https://b11a12-server-side-sajjadjim.vercel.app/users',
         {
@@ -75,8 +72,9 @@ const Navbar = () => {
 
 
   const currentUser = dbUser.filter(db => db.email === user?.email)
-  // const displayName =  dbUser.name 
-  const image = currentUser[0]?.image || 'https://i.ibb.co/4f1z3xH/user.png';
+  // const displayName =  dbUser.name \
+  const name = currentUser[0]?.name || user?.displayName || 'No Name';
+  const image = currentUser[0]?.image || 'https://cdn-icons-png.freepik.com/512/6858/6858485.png';
   // console.log(currentUser[0].image)
 
   return (
@@ -101,7 +99,7 @@ const Navbar = () => {
                               className='rounded-full h-8 w-8 mx-1 cursor-pointer'
                               src={image}
                               alt="User"
-                              title={`${user?.displayName}\n${user?.email}`}
+                              title={`${name}\n${user?.email}`}
                             />
                           }
                         </Link>
