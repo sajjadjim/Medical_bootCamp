@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../Hook/useAuth";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useLocation, useNavigate } from "react-router";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router";
@@ -56,6 +56,7 @@ const Login = () => {
     };
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100 px-4">
+            <ToastContainer />
             <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-2xl shadow-indigo-400 w-full max-w-sm sm:max-w-md transition-all duration-300">
                 <span className=" justify-center grid"><Lottie className='w-25' animationData={registerLottie} loop={true}></Lottie></span>
                 <div className="text-2xl  flex sm:text-3xl  items-center font-bold mb-6 text-center text-blue-600"><Link to='/'><Brain></Brain></Link> <span className="text-center ml-30"> Login</span></div>

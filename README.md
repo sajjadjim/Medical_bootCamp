@@ -137,9 +137,9 @@ React Query Docs
 📬 Contact
 If you have any questions or want to get in touch:
 
-GitHub: @your-username
+GitHub: @sajjadjim
 
-Email: your-email@example.com
+Email: sajjadjim15@gmail.com
 
 📜 License
 This project is licensed under the MIT License.

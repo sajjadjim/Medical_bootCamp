@@ -1,5 +1,6 @@
 import React from 'react';
 import heroVideo from '../../../assets/image-2.mp4';
+import { Link } from 'react-router';
 
 const Section1 = () => {
   return (
@@ -12,7 +13,6 @@ const Section1 = () => {
         muted
         playsInline
       />
-
 
       {/* Dark Overlay */}
       <div className="absolute top-0 left-0 w-full h-full  bg-opacity-60 z-10"></div>
@@ -32,10 +32,10 @@ const Section1 = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <button className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-full text-base font-semibold transition">
-            Start Studying for Free
-          </button>
-          <button className="bg-white text-gray-900 px-6 py-3 rounded-full text-base font-semibold transition hover:bg-gray-200">
+          <Link to='/auth/register' className="bg-indigo-500 cursor-pointer hover:bg-indigo-600 text-white px-6 py-3 rounded-full text-base font-semibold transition">
+            Sign up registration
+          </Link>
+          <button className="bg-white cursor-pointer text-gray-900 px-6 py-3 rounded-full text-base font-semibold transition hover:bg-gray-200">
             ▶ How it Works
           </button>
         </div>

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, X, Home, Code, User, Mail } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import useAuth from '../../Hook/useAuth';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import './style.css'
 import { NavLink } from 'react-router';
 
 const Navbar = () => {
   const { user, logOut } = useAuth();
+  const navigate = useNavigate()
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -44,7 +45,10 @@ const Navbar = () => {
     }).catch((error) => {
       console.log(error)
     })
-    toast("Logout successfully Done ❌");
+    toast.success("Logout successfully Done ❌");
+    setTimeout(() => {
+      navigate(`${location.state ? location.state : '/'}`)
+    }, 2000)
   }
 
   const [dbUser, setDbUser] = useState([])
@@ -70,9 +74,8 @@ const Navbar = () => {
     }
   }, [user]);
 
-
   const currentUser = dbUser.filter(db => db.email === user?.email)
-  // const displayName =  dbUser.name \
+  // const displayName =  dbUser.name 
   const name = currentUser[0]?.name || user?.displayName || 'No Name';
   const image = currentUser[0]?.image || 'https://cdn-icons-png.freepik.com/512/6858/6858485.png';
   // console.log(currentUser[0].image)
@@ -80,6 +83,7 @@ const Navbar = () => {
   return (
     <div>
       <nav className="md:w-full  md:mx-auto w-full fixed top-0 left-0 right-0 z-50 shadow-md  bg-opacity-30 backdrop-blur-md">
+        <ToastContainer />
         <div className="flex justify-between items-center py-3 md:py-4">
           {/* Logo */}
           <div className="md:text-3xl text-2xl font-bold  cursor-pointer"><Link to='/'>Medical Camp <span className='text-indigo-500'>(MCMS)</span></Link></div>
@@ -151,7 +155,7 @@ const Navbar = () => {
                         <div className="w-10 rounded-full">
                           <Link tabIndex={0} role="button" to='/'>
                             {
-                              <img className='rounded-full h-8 w-8 mx-1 cursor-pointer' src={currentUser?.image} alt="User" />
+                              <img className='rounded-full h-8 w-8 mx-1 cursor-pointer' src={image} alt="User" />
                             }
 
                           </Link>
@@ -166,7 +170,7 @@ const Navbar = () => {
                 )
               }
             </div>
-            <ul className="px-4 pb-4 my-2  shadow-md justify-center align-center bg-transparent grid font-medium space-y-3">
+            <ul className="px-4 pb-4 my-2  shadow-md justify-center align-center bg-transparent grid justify-items-center font-medium space-y-3">
               {navItems.map(({ label, to, Icon }) => (
                 <Link
                   key={label}
@@ -182,9 +186,11 @@ const Navbar = () => {
                   />
                 </Link>
               ))}
-              {user ? <div className='grid gap-2'><Link to='/dashboard'>DashBoard</Link><li className='cursor-pointer ' onClick={handleLogOut}>Logout</li></div> : ('')}
+              {user ? <div className='grid justify-items-center gap-2'>
+                <Link to='/dashboard'>DashBoard</Link>
+                <li className='cursor-pointer ' onClick={handleLogOut}>Logout</li>
+              </div> : ('')}
             </ul>
-
           </div>
         </div>
       </nav>
