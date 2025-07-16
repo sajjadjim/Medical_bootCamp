@@ -15,6 +15,9 @@ import {
 
 const RegisterManage = () => {
   const [participants, setParticipants] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const axiosSecure = useAxiosSecure();
 
   // Replace this with your actual auth context hook or logic
@@ -32,7 +35,15 @@ const RegisterManage = () => {
   useEffect(() => {
     const filtered = registerCamps.filter((camp) => camp.ownerEmail === userEmail);
     setParticipants(filtered);
+    setCurrentPage(1); // reset to page 1 when data changes
   }, [registerCamps, userEmail]);
+
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return participants.slice(start, start + itemsPerPage);
+  }, [participants, currentPage]);
+
+  const totalPages = Math.ceil(participants.length / itemsPerPage);
 
   const chartData = useMemo(() => {
     const grouped = {};
@@ -99,14 +110,14 @@ const RegisterManage = () => {
             </tr>
           </thead>
           <tbody>
-            {participants.length === 0 ? (
+            {paginatedData.length === 0 ? (
               <tr>
                 <td colSpan="7" className="py-4 text-center text-gray-500">
                   No registrations found.
                 </td>
               </tr>
             ) : (
-              participants.map((p) => (
+              paginatedData.map((p) => (
                 <tr key={p._id} className="border-t hover:bg-indigo-50 transition-colors">
                   <td className="px-4 py-3 whitespace-nowrap">{p.participantName}</td>
                   <td className="px-4 py-3 whitespace-nowrap">{p.gender}</td>
@@ -147,9 +158,38 @@ const RegisterManage = () => {
             )}
           </tbody>
         </table>
+
+        {/* Pagination Controls */}
+        <div className="flex justify-center mt-4 space-x-2 p-4">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Prev
+          </button>
+          {[...Array(totalPages).keys()].map((n) => (
+            <button
+              key={n}
+              onClick={() => setCurrentPage(n + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === n + 1 ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300"
+              }`}
+            >
+              {n + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+            className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </div>
 
-      {/* Chart container with responsive sizing */}
+      {/* Chart container */}
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h3 className="text-xl font-semibold mb-4 text-center">Payment Status per BootCamp</h3>
         {chartData.length === 0 ? (
