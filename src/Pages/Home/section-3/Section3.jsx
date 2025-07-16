@@ -25,10 +25,12 @@ const Section3 = () => {
     fetchData();
   }, []);
 
+  console.log(bootcamps)
+
   return (
     <section className="py-10 px-4 max-w-7xl mx-auto">
   <h2 className="md:text-4xl text-2xl font-bold mb-15 text-center">
-    Top BootCamps Registrations
+    Popular BootCamps
   </h2>
   <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
     {bootcamps.map((camp) => (
@@ -53,6 +55,10 @@ const Section3 = () => {
               {camp.totalCount}
             </p>
           </div>
+          <p className="flex items-center gap-2 text-gray-600 font-semibold">
+              <FaUsers className="text-indigo-500" />
+             Location : {camp.location}
+            </p>
         </div>
       </div>
     ))}

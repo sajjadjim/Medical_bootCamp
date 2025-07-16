@@ -109,7 +109,7 @@ const ManageRegisteredCamp = () => {
         >
           <option value="">All Camps</option>
           {camps.map((camp) => (
-            <option key={camp._id} value={camp._id}>
+            <option key={camp?._id} value={camp._id}>
               {camp.campName}
             </option>
           ))}
