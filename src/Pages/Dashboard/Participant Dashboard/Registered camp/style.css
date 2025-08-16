@@ -1,38 +1,33 @@
+/* Subtle animated border glow + hover lift */
 .animated-border-wrapper {
   position: relative;
-  border-radius: 1rem;
-  overflow: hidden;
-  z-index: 0;
+  border-radius: 1.25rem; /* 2xl */
 }
 
 .animated-border-wrapper::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
+  inset: -2px;
+  border-radius: inherit;
   background: conic-gradient(
-    from 0deg,
-    #6366f1,
-    #a5b4fc,
-    #6366f1,
-    #a5b4fc,
-    #6366f1
+    from 180deg at 50% 50%,
+    #a78bfa,
+    #4f46e5,
+    #22c55e,
+    #a78bfa
   );
-  animation: rotate-border 6s linear infinite;
-  z-index: -1;
-  border-radius: 1rem;
-  padding: 2px;
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: destination-out;
+  filter: blur(6px);
+  opacity: 0.15;
+  transition: opacity 300ms ease, transform 300ms ease;
+  z-index: 0;
 }
 
-@keyframes rotate-border {
-  to {
-    transform: rotate(360deg);
-  }
+.animated-border-wrapper:hover::before {
+  opacity: 0.35;
+  transform: scale(1.01);
+}
+
+.animated-border-wrapper > * {
+  position: relative;
+  z-index: 1;
 }
