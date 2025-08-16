@@ -12,146 +12,258 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import {
+  Search,
+  Download,
+  Trash2,
+  CheckCircle2,
+  Clock,
+} from "lucide-react";
+
+const LoadingSkeleton = () => (
+  <div className="p-4 max-w-7xl mx-auto">
+    <div className="h-10 w-60 bg-gray-200 rounded mb-4 animate-pulse" />
+    <div className="bg-white rounded-xl border border-gray-200 shadow overflow-hidden">
+      {[...Array(8)].map((_, i) => (
+        <div key={i} className="h-12 border-b last:border-0 bg-gray-50/60 animate-pulse" />
+      ))}
+    </div>
+    <div className="mt-8 h-72 bg-gray-100 rounded-xl animate-pulse" />
+  </div>
+);
+
+const EmptyState = ({ label = "No registrations found." }) => (
+  <div className="bg-white/90 backdrop-blur rounded-xl border border-indigo-50 shadow p-10 text-center">
+    <div className="mx-auto w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center text-2xl mb-3">📭</div>
+    <p className="text-gray-600">{label}</p>
+  </div>
+);
+
+const StatusChip = ({ status }) => {
+  const paid = status === "paid";
+  return (
+    <span
+      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium
+      ${paid ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}
+    >
+      {paid ? <CheckCircle2 size={14} /> : <Clock size={14} />}
+      {paid ? "Paid" : "Unpaid"}
+    </span>
+  );
+};
 
 const RegisterManage = () => {
-  const [participants, setParticipants] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
   const axiosSecure = useAxiosSecure();
 
-  // Replace this with your actual auth context hook or logic
+  // Replace with your real auth
   const user = { email: "sajjadjim15@gmail.com" };
   const userEmail = user?.email;
 
-  const { data: registerCamps = [] } = useQuery({
+  const itemsPerPage = 10;
+
+  const { data: registerCamps = [], isLoading } = useQuery({
     queryKey: ["registrations"],
     queryFn: async () => {
       const res = await axiosSecure.get(`/registrations`);
-      return res.data;
+      return res.data || [];
     },
   });
 
-  useEffect(() => {
-    const filtered = registerCamps.filter((camp) => camp.ownerEmail === userEmail);
-    setParticipants(filtered);
-    setCurrentPage(1); // reset to page 1 when data changes
-  }, [registerCamps, userEmail]);
+  // Filter to this organizer’s camps
+  const myAll = useMemo(
+    () => registerCamps.filter((camp) => camp.ownerEmail === userEmail),
+    [registerCamps, userEmail]
+  );
 
+  // UI state: search/status/pagination
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all"); // all | paid | unpaid
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Derived: filtering
+  const participants = useMemo(() => {
+    const s = search.trim().toLowerCase();
+    let arr = [...myAll];
+
+    if (s) {
+      arr = arr.filter(
+        (p) =>
+          (p.participantName || "").toLowerCase().includes(s) ||
+          (p.campName || "").toLowerCase().includes(s) ||
+          (p.location || "").toLowerCase().includes(s)
+      );
+    }
+    if (statusFilter !== "all") {
+      arr = arr.filter((p) => (statusFilter === "paid" ? p.payment_status === "paid" : p.payment_status !== "paid"));
+    }
+    return arr;
+  }, [myAll, search, statusFilter]);
+
+  // Pagination
+  const totalPages = Math.max(1, Math.ceil(participants.length / itemsPerPage));
+  useEffect(() => setCurrentPage(1), [search, statusFilter, participants.length]);
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return participants.slice(start, start + itemsPerPage);
   }, [participants, currentPage]);
 
-  const totalPages = Math.ceil(participants.length / itemsPerPage);
-
+  // Chart data
   const chartData = useMemo(() => {
     const grouped = {};
     participants.forEach(({ campName, payment_status }) => {
-      if (!grouped[campName]) {
-        grouped[campName] = { name: campName, paid: 0, unpaid: 0 };
-      }
-      if (payment_status === "paid") {
-        grouped[campName].paid += 1;
-      } else {
-        grouped[campName].unpaid += 1;
-      }
+      const key = campName || "Unknown";
+      if (!grouped[key]) grouped[key] = { name: key, paid: 0, unpaid: 0 };
+      payment_status === "paid" ? (grouped[key].paid += 1) : (grouped[key].unpaid += 1);
     });
     return Object.values(grouped);
   }, [participants]);
 
+  // Delete handler
   const handleDelete = async (id) => {
-    try {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "This registration will be permanently deleted.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, delete it!",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            const res = await axiosSecure.delete(`/registrations/${id}`);
-            if (res.data.deletedCount > 0) {
-              Swal.fire("Deleted!", "Registration has been deleted.", "success");
-              setParticipants((prev) => prev.filter((p) => p._id !== id));
-            } else {
-              Swal.fire("Failed", "Could not delete the registration.", "error");
-            }
-          } catch (error) {
-            Swal.fire("Error", "Something went wrong!", "error");
-            console.error("Delete error:", error);
-          }
+    Swal.fire({
+      title: "Delete this registration?",
+      text: "This registration will be permanently removed.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (!result.isConfirmed) return;
+      try {
+        const res = await axiosSecure.delete(`/registrations/${id}`);
+        if (res.data.deletedCount > 0) {
+          Swal.fire("Deleted!", "Registration has been deleted.", "success");
+          // Optimistic remove
+          // (You could refetch with react-query; for simplicity, splice locally)
+          const idx = registerCamps.findIndex((r) => r._id === id);
+          if (idx !== -1) registerCamps.splice(idx, 1);
+        } else {
+          Swal.fire("Failed", "Could not delete the registration.", "error");
         }
-      });
-    } catch (err) {
-      console.error("Error deleting participant:", err);
-    }
+      } catch (error) {
+        Swal.fire("Error", "Something went wrong!", "error");
+        console.error("Delete error:", error);
+      }
+    });
   };
+
+  // CSV export (filtered)
+  const exportCSV = () => {
+    const rows = [
+      ["Participant Name", "Gender", "Camp Name", "Location", "Status", "Registered At", "Owner Email", "Participant Email", "Phone"],
+      ...participants.map((p) => [
+        p.participantName || "",
+        p.gender || "",
+        p.campName || "",
+        p.location || "",
+        p.payment_status || "",
+        p.dateTime ? new Date(p.dateTime).toISOString() : "",
+        p.ownerEmail || "",
+        p.participantEmail || "",
+        p.phone || "",
+      ]),
+    ];
+    const csv = rows.map((r) => r.map((x) => `"${String(x).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `registrations_${Date.now()}.csv`; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  if (isLoading) return <LoadingSkeleton />;
 
   return (
     <div className="p-4 max-w-7xl mx-auto">
-      <h2 className="md:text-3xl text-xl font-semibold text-center mb-4">Registered Participants</h2>
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
+        <div>
+          <h2 className="md:text-3xl text-xl font-semibold">Registered Participants</h2>
+          <p className="text-gray-600 text-sm">{participants.length} result{participants.length !== 1 ? "s" : ""}</p>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search name, camp, location…"
+              className="w-full sm:w-72 pl-9 pr-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+          </div>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          >
+            <option value="all">All Status</option>
+            <option value="paid">Paid</option>
+            <option value="unpaid">Unpaid</option>
+          </select>
+          <button
+            onClick={exportCSV}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98] transition"
+          >
+            <Download size={16} />
+            Export CSV
+          </button>
+        </div>
+      </div>
 
-      {/* Responsive table wrapper */}
-      <div className="overflow-x-auto mb-10 rounded-lg shadow-md border border-gray-200">
-        <table className="min-w-full bg-white rounded-lg">
-          <thead className="bg-gray-100 text-gray-700">
-            <tr>
-              <th className="px-4 py-3 text-left whitespace-nowrap">Participant Name</th>
-              <th className="px-4 py-3 text-left whitespace-nowrap">Gender</th>
-              <th className="px-4 py-3 text-left whitespace-nowrap">Camp Name</th>
-              <th className="px-4 py-3 text-left whitespace-nowrap">Location</th>
-              <th className="px-4 py-3 text-left whitespace-nowrap">Status</th>
-              <th className="px-4 py-3 text-left whitespace-nowrap">Confirm</th>
-              <th className="px-4 py-3 text-left whitespace-nowrap">Action</th>
+      {/* Table */}
+      <div className="overflow-x-auto rounded-xl border border-gray-200 shadow bg-white">
+        <table className="min-w-full">
+          <thead className="bg-gray-50 sticky top-0 z-0">
+            <tr className="text-left text-gray-700">
+              <th className="px-4 py-3 whitespace-nowrap">Participant</th>
+              <th className="px-4 py-3 whitespace-nowrap">Gender</th>
+              <th className="px-4 py-3 whitespace-nowrap">Camp</th>
+              <th className="px-4 py-3 whitespace-nowrap">Location</th>
+              <th className="px-4 py-3 whitespace-nowrap">Status</th>
+              <th className="px-4 py-3 whitespace-nowrap">Confirm</th>
+              <th className="px-4 py-3 whitespace-nowrap">Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y">
             {paginatedData.length === 0 ? (
               <tr>
-                <td colSpan="7" className="py-4 text-center text-gray-500">
-                  No registrations found.
+                <td colSpan={7} className="py-6">
+                  <EmptyState />
                 </td>
               </tr>
             ) : (
-              paginatedData.map((p) => (
-                <tr key={p._id} className="border-t hover:bg-indigo-50 transition-colors">
+              paginatedData.map((p, i) => (
+                <tr
+                  key={p._id}
+                  className={`transition-colors ${i % 2 === 0 ? "bg-white" : "bg-gray-50/50"} hover:bg-indigo-50`}
+                >
                   <td className="px-4 py-3 whitespace-nowrap">{p.participantName}</td>
-                  <td className="px-4 py-3 whitespace-nowrap">{p.gender}</td>
+                  <td className="px-4 py-3 whitespace-nowrap capitalize">{p.gender || "—"}</td>
                   <td className="px-4 py-3 whitespace-nowrap">{p.campName}</td>
                   <td className="px-4 py-3 whitespace-nowrap">{p.location}</td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <span
-                      className={`px-2 py-1 rounded text-white ${
-                        p.payment_status === "paid" ? "bg-green-500" : "bg-red-500"
-                      }`}
-                    >
-                      {p.payment_status}
-                    </span>
+                    <StatusChip status={p.payment_status} />
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap font-semibold">
                     {p.payment_status === "paid" ? (
-                      <span className="text-green-600">Confirm</span>
+                      <span className="text-green-600">Confirmed</span>
                     ) : (
-                      <span className="text-yellow-600">Pending</span>
+                      <span className="text-amber-600">Pending</span>
                     )}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
-                    {p.payment_status === "paid" ? (
-                      <button disabled className="text-gray-400 cursor-not-allowed px-3 py-1 rounded">
-                        ❌
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => handleDelete(p._id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                      >
-                        Delete
-                      </button>
-                    )}
+                    <button
+                      onClick={() => handleDelete(p._id)}
+                      disabled={p.payment_status === "paid"}
+                      className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border transition
+                        ${p.payment_status === "paid"
+                          ? "border-gray-200 text-gray-400 cursor-not-allowed"
+                          : "border-red-200 text-red-600 hover:bg-red-50"}`}
+                      title={p.payment_status === "paid" ? "Cannot delete paid registration" : "Delete registration"}
+                    >
+                      <Trash2 size={16} />
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))
@@ -159,54 +271,71 @@ const RegisterManage = () => {
           </tbody>
         </table>
 
-        {/* Pagination Controls */}
-        <div className="flex justify-center mt-4 space-x-2 p-4">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-            className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-          >
-            Prev
-          </button>
-          {[...Array(totalPages).keys()].map((n) => (
-            <button
-              key={n}
-              onClick={() => setCurrentPage(n + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === n + 1 ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300"
-              }`}
-            >
-              {n + 1}
-            </button>
-          ))}
-          <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-            className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
+        {/* Pagination */}
+        {paginatedData.length > 0 && (
+          <div className="flex flex-wrap items-center justify-between gap-2 p-4">
+            <div className="text-sm text-gray-600">
+              Page <b>{currentPage}</b> of <b>{totalPages}</b> • Showing{" "}
+              <b>{paginatedData.length}</b> of <b>{participants.length}</b>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50"
+              >
+                Prev
+              </button>
+              {[...Array(totalPages).keys()].map((n) => (
+                <button
+                  key={n}
+                  onClick={() => setCurrentPage(n + 1)}
+                  className={`px-3 py-1.5 rounded-lg border transition ${
+                    currentPage === n + 1
+                      ? "bg-indigo-600 text-white border-indigo-600"
+                      : "border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  {n + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Chart container */}
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h3 className="text-xl font-semibold mb-4 text-center">Payment Status per BootCamp</h3>
+      {/* Chart */}
+      <div className="bg-white mt-10 p-6 rounded-xl shadow border border-indigo-50">
+        <h3 className="text-xl font-semibold mb-4 text-center">Payment Status per Bootcamp</h3>
         {chartData.length === 0 ? (
           <p className="text-center text-gray-500">No data to display.</p>
         ) : (
-          <ResponsiveContainer width="100%" height={300} minWidth={300}>
-            <BarChart
-              data={chartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
+          <ResponsiveContainer width="100%" height={320} minWidth={300}>
+            <BarChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="paidGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#4f46e5" stopOpacity={0.9} />
+                  <stop offset="100%" stopColor="#4f46e5" stopOpacity={0.6} />
+                </linearGradient>
+                <linearGradient id="unpaidGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#a78bfa" stopOpacity={0.9} />
+                  <stop offset="100%" stopColor="#a78bfa" stopOpacity={0.6} />
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" tick={{ fontSize: 12 }} />
               <YAxis allowDecimals={false} />
               <Tooltip />
               <Legend />
-              <Bar dataKey="paid" stackId="a" fill="#4f46e5" name="Paid" />
-              <Bar dataKey="unpaid" stackId="a" fill="#a78bfa" name="Unpaid" />
+              <Bar dataKey="paid" stackId="a" fill="url(#paidGrad)" name="Paid" />
+              <Bar dataKey="unpaid" stackId="a" fill="url(#unpaidGrad)" name="Unpaid" />
             </BarChart>
           </ResponsiveContainer>
         )}
