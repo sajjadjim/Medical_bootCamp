@@ -28,7 +28,7 @@ const Section3 = () => {
   console.log(bootcamps)
 
   return (
-    <section className="py-10 px-4 max-w-7xl mx-auto">
+    <section className="py-10 px-4 2xl:max-w-7xl md:max-w-6xl mx-auto">
   <h2 className="md:text-4xl text-2xl font-bold mb-15 text-center">
     Popular BootCamps
   </h2>
@@ -66,7 +66,7 @@ const Section3 = () => {
   <div className="grid justify-center mt-5">
     <Link
       to="/availableBootcamp"
-      className="btn rounded-3xl shadow-2xl bg-indigo-400 text-white hover:text-indigo-600 hover:bg-white transition"
+      className="btn rounded-3xl shadow-2xl mt-15  bg-indigo-400 text-white hover:text-indigo-600 hover:bg-white transition"
     >
       Show All
     </Link>
