@@ -6,6 +6,7 @@ import {
   Globe,
   GraduationCap,
 } from "lucide-react";
+import { Link } from "react-router";
 
 const benefits = [
   {
@@ -57,9 +58,9 @@ const testimonials = [
 
 export default function WhyBootcamps() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white max-w-7xl mx-auto min-h-screen">
       {/* Hero */}
-      <section className="bg-gradient-to-b from-violet-50 to-white border-b">
+      <section className=" border-b">
         <div className="max-w-7xl mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-slate-900">
             Why Join <span className="text-violet-600">Medical Bootcamps?</span>
@@ -89,7 +90,7 @@ export default function WhyBootcamps() {
       </section>
 
       {/* Testimonials */}
-      <section className="bg-violet-50 py-16">
+      {/* <section className=" py-16">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-2xl font-bold text-center">Success Stories</h2>
           <div className="mt-10 grid md:grid-cols-2 gap-6">
@@ -110,7 +111,7 @@ export default function WhyBootcamps() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Call to action */}
       <section className="max-w-7xl mx-auto px-4 py-20 text-center">
@@ -120,7 +121,7 @@ export default function WhyBootcamps() {
           becoming a healthcare leader of tomorrow.
         </p>
         <button className="mt-6 px-6 py-3 rounded-xl bg-violet-600 text-white font-semibold hover:bg-violet-700">
-          Explore Bootcamps
+          <Link to='/availableBootcamp'>Explore Bootcamps</Link>
         </button>
       </section>
     </div>

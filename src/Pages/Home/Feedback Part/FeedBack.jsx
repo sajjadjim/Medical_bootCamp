@@ -37,7 +37,7 @@ const FeedBack = () => {
   };
 
   return (
-    <div className="overflow-hidden p-6 md:w-10/12 mx-auto">
+    <div className="overflow-hidden p-6 max-w-7xl mx-auto">
       <h1 className="md:text-4xl text-2xl font-bold my-8 text-center text-indigo-700">
         What Our Users Say 💬
       </h1>

@@ -17,7 +17,7 @@ const Section2 = () => {
   };
 
   return (
-    <div className="hero bg-white md:py-20">
+    <div className="hero bg-white max-w-7xl mx-auto md:py-20">
       <div className="hero-content flex flex-col lg:flex-row items-center gap-10 px-6 md:px-16">
         {/* Fixed image column */}
         <div className="lg:w-1/2 w-full">

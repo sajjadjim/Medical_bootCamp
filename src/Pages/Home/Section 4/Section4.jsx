@@ -27,7 +27,7 @@ const features = [
 
 const Section4 = () => {
   return (
-    <section className="bg-white py-20 px-4 md:px-8 lg:px-16">
+    <section className="bg-white max-w-7xl mx-auto py-20 ">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-4xl font-bold text-indigo-600 mb-4">
           Medical Bootcamp

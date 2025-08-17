@@ -71,7 +71,7 @@ const Count = () => {
     ];
 
     return (
-        <div className="max-w-5xl mx-auto px-4 md:mb-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto md:mb-10 grid grid-cols-1 md:grid-cols-3 gap-8">
             {cardData.map(({ label, count, icon, bg }) => (
                 <div
                     key={label}
