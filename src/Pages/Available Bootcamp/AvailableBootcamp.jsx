@@ -131,7 +131,7 @@ const AvailableBootcamp = () => {
   };
 
   return (
-    <section className="py-20 px-4 max-w-7xl mx-auto relative">
+    <section className="py-20 px-4 2xl:max-w-7xl md:max-w-6xl mx-auto relative">
       {/* decorative blobs */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-10 -left-10 h-64 w-64 bg-indigo-200/40 blur-3xl rounded-full" />
@@ -139,7 +139,7 @@ const AvailableBootcamp = () => {
       </div>
 
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-        <h2 className="md:text-5xl text-2xl font-bold tracking-tight">Available Bootcamps</h2>
+        <h2 className="2xl:text-4xl text-2xl font-bold tracking-tight">Available Bootcamps</h2>
 
         {/* search with suggestions */}
         <div className="relative w-full md:w-auto" ref={inputRef}>

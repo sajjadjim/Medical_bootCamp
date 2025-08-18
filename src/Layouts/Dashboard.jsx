@@ -80,7 +80,7 @@ const Dashboard = () => {
         <div className={`flex items-center justify-between px-4 py-4 ${collapsed ? "md:px-3" : ""}`}>
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold text-lg">
-              D
+              JIM
             </div>
             {!collapsed && (
               <div className="leading-tight">
